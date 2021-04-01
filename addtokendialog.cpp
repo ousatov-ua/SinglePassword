@@ -20,14 +20,9 @@ AddTokenDialog::~AddTokenDialog()
 
 void AddTokenDialog::on_saveButton__clicked()
 {
-
     MainWindow *mainWindow = (MainWindow*)this->parent();
     QString tokenValue = this->ui->token_->text().simplified();
     const Token token = Token{.data = tokenValue.toStdString()};
-    if(encryptService->containsToken(token)){
-        QMessageBox::information(this, "Error", "The token already exists!");
-        return;
-    }
 
     QString data = this->ui->data_->toPlainText();
     if(tokenValue.size() == 0){
@@ -41,10 +36,19 @@ void AddTokenDialog::on_saveButton__clicked()
     const std::string tokenData = data.toStdString();
     DecryptedData decryptedData{};
     encryptService->createDecryptedData(tokenData, &decryptedData);
-    if(mainWindow->addToken(token, decryptedData)){
+    switch (mode) {
+
+    case CREATE:{
+        if(encryptService->containsToken(token)){
+            QMessageBox::information(this, "Error", "The token already exists!");
+            return;
+        }
+    }
+    }
+    if(mainWindow->addToken(token, decryptedData, mode)){
         closeDialog();
     }else{
-        QMessageBox::information(this, "Error", "Cannot add token!");
+        QMessageBox::information(this, "Error", "Cannot save data!");
     }
 }
 
@@ -62,5 +66,16 @@ void AddTokenDialog::closeDialog(){
 
 void AddTokenDialog::closeEvent(QCloseEvent * event){
     closeDialog();
+}
+
+void AddTokenDialog::setMode(Mode mode){
+    this->mode = mode;
+    bool readOnly = mode == EDIT;
+        this->ui->token_->setReadOnly(readOnly);
+}
+
+void AddTokenDialog::setData(const Token &token, const DecryptedData &decryptedData){
+    this->ui->token_->setText(QString(token.data.c_str()));
+    this->ui->data_->document()->setPlainText(QString((char*)decryptedData.result));
 }
 

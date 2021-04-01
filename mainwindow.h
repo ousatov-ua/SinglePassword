@@ -18,7 +18,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(EncryptService *encryptService, QWidget *parent = nullptr);
     ~MainWindow();
-    bool addToken(const Token &token, const DecryptedData &decryptedData);
+    bool addToken(const Token &token, const DecryptedData &decryptedData, Mode mode);
     void removeToken(const Token &token);
 
 private slots:
@@ -27,6 +27,8 @@ private slots:
     void on_deleteToken__clicked();
 
     void token_selectionChanged(QItemSelection item);
+
+    void on_editToken__clicked();
 
 private:
     Ui::MainWindow *ui;

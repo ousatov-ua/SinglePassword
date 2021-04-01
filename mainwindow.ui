@@ -61,9 +61,9 @@
     <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>40</x>
        <y>480</y>
-       <width>150</width>
+       <width>217</width>
        <height>32</height>
       </rect>
      </property>
@@ -72,6 +72,13 @@
        <widget class="QPushButton" name="addToken_">
         <property name="text">
          <string>Add</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="editToken_">
+        <property name="text">
+         <string>Edit</string>
         </property>
        </widget>
       </item>

@@ -35,15 +35,15 @@ MainWindow::~MainWindow()
 
 }
 
-bool MainWindow::addToken(const Token &token, const DecryptedData &decryptedData){
+bool MainWindow::addToken(const Token &token, const DecryptedData &decryptedData, Mode mode){
     SaveResult saveResult = encryptService->encrypt(token, decryptedData);
-    if(saveResult == SAVE_SUCCESS){
+    if(mode == CREATE && saveResult == SAVE_SUCCESS){
         if(model->insertRow(model->rowCount())) {
             QModelIndex index = model->index(model->rowCount() - 1, 0);
             model->setData(index, QString(token.data.c_str()));
         }
     }
-    return true;;
+    return saveResult == SAVE_SUCCESS;
 }
 
 void MainWindow::removeToken(const Token &token){
@@ -53,18 +53,19 @@ void MainWindow::removeToken(const Token &token){
         QModelIndex index = ui->tokensList_->selectionModel()->selectedIndexes().at(0);
         model->removeRow(index.row());
     }else{
-        QMessageBox::information(this, "Remove token", "Cannot remove token!");
+        QMessageBox::information(this, "Remove token", "Cannot remove token");
     }
 }
 
 void MainWindow::on_addToken__clicked()
 {
     if(addTokenDialog!= nullptr){
-        addTokenDialog->show();
+        addTokenDialog->setMode(CREATE);
+
     }else{
         addTokenDialog = new AddTokenDialog(this->encryptService, this);
-        addTokenDialog->show();
     }
+    addTokenDialog->show();
 }
 
 void MainWindow::on_deleteToken__clicked()
@@ -86,4 +87,25 @@ void MainWindow::token_selectionChanged(QItemSelection itemSelection){
         std::string result = std::string((char*)decryptedData.result);
         ui->tokenValue_->document()->setPlainText(QString(result.c_str()));
     }
+}
+
+void MainWindow::on_editToken__clicked()
+{
+    auto indexes = ui->tokensList_->selectionModel()->selectedIndexes();
+    if(indexes.isEmpty()){
+        QMessageBox::information(this, "Edit token", "Please select token");
+        return;
+    }
+    auto index = indexes.first();
+    Token token { .data = index.data(Qt::DisplayRole).toString().toStdString() };
+    DecryptedData decryptedData{};
+    encryptService->decrypt(token, decryptedData);
+    if(addTokenDialog == nullptr){
+        addTokenDialog = new AddTokenDialog(this->encryptService, this);
+    }
+
+    addTokenDialog->setData(token, decryptedData);
+    addTokenDialog->setMode(EDIT);
+    addTokenDialog->show();
+
 }
