@@ -26,9 +26,7 @@ MainWindow::MainWindow(EncryptService * encryptService, QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    if(model != nullptr){
-        delete model;
-    }
+    delete model;
     if(addTokenDialog !=nullptr){
         delete addTokenDialog;
     }
