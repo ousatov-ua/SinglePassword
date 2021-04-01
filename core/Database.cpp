@@ -48,6 +48,11 @@ SaveResult Database::addToken(const Token &token, const EncryptedData &encrypted
     return save();
 }
 
+SaveResult Database::removeToken(const Token &token){
+    data_.erase(token);
+    return save();
+}
+
 const EncryptedData &Database::getEncryptedData(const Token &token) const {
     return data_.at(token);
 }

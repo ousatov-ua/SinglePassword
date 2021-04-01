@@ -19,8 +19,8 @@ Encryptor::~Encryptor() {
     fclose(log_);
 }
 
-void Encryptor::encrypt(DecryptedData *decryptedData,
-                        EncryptedData *encryptedData) const {
+void Encryptor::encrypt(const DecryptedData *decryptedData,
+            EncryptedData *encryptedData) const {
     try {
         EVP_CIPHER_CTX *ctx;
 
@@ -33,7 +33,7 @@ void Encryptor::encrypt(DecryptedData *decryptedData,
             throw EncryptException("Cannot initialize context");
 
         if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, (unsigned char *) encKeys_->key.c_str(),
-                                    (unsigned char *) encKeys_->iv.c_str())) {
+                        (unsigned char *) encKeys_->iv.c_str())) {
             throw EncryptException("Cannot initialize encryption");
         }
 
@@ -62,7 +62,7 @@ void Encryptor::logException() const {
 }
 
 void Encryptor::decrypt(EncryptedData *encryptedData,
-                        DecryptedData *decryptedData) const {
+            DecryptedData *decryptedData) const {
     try {
         EVP_CIPHER_CTX *ctx;
 
@@ -75,12 +75,12 @@ void Encryptor::decrypt(EncryptedData *encryptedData,
         }
 
         if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, (unsigned char *) encKeys_->key.c_str(),
-                                    (unsigned char *) encKeys_->iv.c_str())) {
+                        (unsigned char *) encKeys_->iv.c_str())) {
             throw DecryptException("Cannot initialize decryption");
         }
 
         if (1 != EVP_DecryptUpdate(ctx, decryptedData->result, &len, (unsigned char *) encryptedData->rawData.c_str(),
-                                   encryptedData->length)) {
+                       encryptedData->length)) {
             throw DecryptException("cannot decrypt message");
         }
         plaintext_len = len;
@@ -102,7 +102,3 @@ EncKeys *Encryptor::getEncKeys() {
     return this->encKeys_.get();
 }
 
-void Encryptor::createDecryptedData(const std::string &value, DecryptedData *decryptedData) {
-    memcpy(decryptedData->result, value.c_str(), value.size());
-    decryptedData->length = value.size();
-}

@@ -85,13 +85,11 @@ public:
 
     void logException() const;
 
-    void encrypt(DecryptedData *decryptedData, EncryptedData *encryptedData) const;
+    void encrypt(const DecryptedData *decryptedData, EncryptedData *encryptedData) const;
 
     void decrypt(EncryptedData *encryptedData, DecryptedData *decryptedData) const;
 
     EncKeys* getEncKeys();
-
-    void createDecryptedData(const std::string &value, DecryptedData *decryptedData);
 
 private:
     FILE *log_;

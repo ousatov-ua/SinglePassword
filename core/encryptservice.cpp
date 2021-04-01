@@ -14,7 +14,7 @@ void EncryptService::initializeDb(const std::string &pass){
     Util::getEncKeys(encryptor->getEncKeys(), pass);
     EncryptedData encryptedData{};
     DecryptedData decryptedData{};
-    encryptor->createDecryptedData(initValue, &decryptedData);
+    createDecryptedData(initValue, &decryptedData);
     encryptor->encrypt(&decryptedData, &encryptedData);
     database->addToken(initialToken, encryptedData);
 }
@@ -39,4 +39,23 @@ bool EncryptService::validatePass(const std::string &pass){
     }catch(const DecryptException &e){
         return false;;
     }
+}
+
+std::vector<Token> EncryptService::getTokens() const {
+    return database->getTokens();
+}
+
+SaveResult EncryptService::encrypt(const Token &token, const DecryptedData &decryptedData){
+    EncryptedData encryptedData;
+    encryptor->encrypt(&decryptedData, &encryptedData);
+    return database->addToken(token, encryptedData);
+}
+
+SaveResult EncryptService::removeToken(const Token &token){
+    return database->removeToken(token);
+}
+
+void EncryptService::createDecryptedData(const std::string &value, DecryptedData *decryptedData) {
+    memcpy(decryptedData->result, value.c_str(), value.size());
+    decryptedData->length = value.size();
 }

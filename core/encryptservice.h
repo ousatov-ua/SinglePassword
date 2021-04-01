@@ -12,6 +12,10 @@ public:
     void initializeDb(const std::string &pass);
     bool initialTokenExists();
     bool validatePass(const std::string &pass);
+    std::vector<Token> getTokens() const;
+    SaveResult encrypt(const Token &token, const DecryptedData &data);
+    SaveResult removeToken(const Token &token);
+    void createDecryptedData(const std::string &value, DecryptedData *decryptedData);
 private:
     std::unique_ptr<Database> database;
     std::unique_ptr<Encryptor> encryptor;

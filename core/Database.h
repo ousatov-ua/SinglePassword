@@ -59,6 +59,8 @@ public:
 
     SaveResult addToken(const Token &token, const EncryptedData &encryptedData);
 
+    SaveResult removeToken(const Token &token);
+
     const EncryptedData &getEncryptedData(const Token &token) const;
 
 private:
