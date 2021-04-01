@@ -87,7 +87,7 @@ public:
 
     void encrypt(const DecryptedData *decryptedData, EncryptedData *encryptedData) const;
 
-    void decrypt(EncryptedData *encryptedData, DecryptedData *decryptedData) const;
+    void decrypt(const EncryptedData *encryptedData, DecryptedData *decryptedData) const;
 
     EncKeys* getEncKeys();
 

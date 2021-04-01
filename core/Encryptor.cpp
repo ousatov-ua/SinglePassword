@@ -20,7 +20,7 @@ Encryptor::~Encryptor() {
 }
 
 void Encryptor::encrypt(const DecryptedData *decryptedData,
-            EncryptedData *encryptedData) const {
+            EncryptedData *outEncryptedData) const {
     try {
         EVP_CIPHER_CTX *ctx;
 
@@ -49,8 +49,8 @@ void Encryptor::encrypt(const DecryptedData *decryptedData,
 
         EVP_CIPHER_CTX_free(ctx);
 
-        encryptedData->rawData = std::string((char *) result);
-        encryptedData->length = ciphertext_len;
+        outEncryptedData->rawData = std::string((char *) result);
+        outEncryptedData->length = ciphertext_len;
     } catch (std::exception &e) {
         logException();
         throw;
@@ -61,8 +61,8 @@ void Encryptor::logException() const {
     ERR_print_errors_fp(log_);
 }
 
-void Encryptor::decrypt(EncryptedData *encryptedData,
-            DecryptedData *decryptedData) const {
+void Encryptor::decrypt(const EncryptedData *encryptedData,
+            DecryptedData *outDecryptedData) const {
     try {
         EVP_CIPHER_CTX *ctx;
 
@@ -79,19 +79,19 @@ void Encryptor::decrypt(EncryptedData *encryptedData,
             throw DecryptException("Cannot initialize decryption");
         }
 
-        if (1 != EVP_DecryptUpdate(ctx, decryptedData->result, &len, (unsigned char *) encryptedData->rawData.c_str(),
+        if (1 != EVP_DecryptUpdate(ctx, outDecryptedData->result, &len, (unsigned char *) encryptedData->rawData.c_str(),
                        encryptedData->length)) {
             throw DecryptException("cannot decrypt message");
         }
         plaintext_len = len;
 
-        if (1 != EVP_DecryptFinal_ex(ctx, decryptedData->result + len, &len)) {
+        if (1 != EVP_DecryptFinal_ex(ctx, outDecryptedData->result + len, &len)) {
             throw DecryptException("Validation failed");
         }
         plaintext_len += len;
 
         EVP_CIPHER_CTX_free(ctx);
-        decryptedData->length = plaintext_len;
+        outDecryptedData->length = plaintext_len;
     } catch (std::exception &e) {
         logException();
         throw;

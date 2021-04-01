@@ -5,6 +5,7 @@
 #include "core/encryptservice.h"
 #include <QStringListModel>
 #include "addtokendialog.h"
+#include <QItemSelection>
 
 namespace Ui {
 class MainWindow;
@@ -24,6 +25,8 @@ private slots:
     void on_addToken__clicked();
 
     void on_deleteToken__clicked();
+
+    void token_selectionChanged(QItemSelection item);
 
 private:
     Ui::MainWindow *ui;

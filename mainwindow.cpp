@@ -19,6 +19,9 @@ MainWindow::MainWindow(EncryptService * encryptService, QWidget *parent) :
     model->setStringList(tokens);
     ui->tokensList_->setModel(model);
     ui->tokensList_->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    connect(ui->tokensList_->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this,
+        SLOT(token_selectionChanged(QItemSelection)));
 }
 
 MainWindow::~MainWindow()
@@ -42,7 +45,7 @@ bool MainWindow::addToken(const Token &token, const DecryptedData &decryptedData
             model->setData(index, QString(token.data.c_str()));
         }
     }
-    return true;
+    return true;;
 }
 
 void MainWindow::removeToken(const Token &token){
@@ -68,5 +71,21 @@ void MainWindow::on_addToken__clicked()
 
 void MainWindow::on_deleteToken__clicked()
 {
+    auto indexes = ui->tokensList_->selectionModel()->selectedIndexes();
+    if(!indexes.isEmpty()){
+        auto index = indexes.first();
+        Token token { .data = index.data(Qt::DisplayRole).toString().toStdString() };
+        removeToken(token);
+    }
+}
 
+void MainWindow::token_selectionChanged(QItemSelection itemSelection){
+    if(!itemSelection.indexes().isEmpty()){
+        auto index = itemSelection.indexes().first();
+        Token token { .data = index.data(Qt::DisplayRole).toString().toStdString() };
+        DecryptedData decryptedData{};
+        encryptService->decrypt(token, decryptedData);
+        std::string result = std::string((char*)decryptedData.result);
+        ui->tokenValue_->document()->setPlainText(QString(result.c_str()));
+    }
 }

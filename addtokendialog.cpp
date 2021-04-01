@@ -23,6 +23,12 @@ void AddTokenDialog::on_saveButton__clicked()
 
     MainWindow *mainWindow = (MainWindow*)this->parent();
     QString tokenValue = this->ui->token_->text().simplified();
+    const Token token = Token{.data = tokenValue.toStdString()};
+    if(encryptService->containsToken(token)){
+        QMessageBox::information(this, "Error", "The token already exists!");
+        return;
+    }
+
     QString data = this->ui->data_->toPlainText();
     if(tokenValue.size() == 0){
         QMessageBox::information(this, "Error", "Wrong token name!");
@@ -32,7 +38,6 @@ void AddTokenDialog::on_saveButton__clicked()
         QMessageBox::information(this, "Error", "No data to encrypt!");
         return;
     }
-    const Token token = Token{.data = tokenValue.toStdString()};
     const std::string tokenData = data.toStdString();
     DecryptedData decryptedData{};
     encryptService->createDecryptedData(tokenData, &decryptedData);

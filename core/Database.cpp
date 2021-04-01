@@ -56,3 +56,7 @@ SaveResult Database::removeToken(const Token &token){
 const EncryptedData &Database::getEncryptedData(const Token &token) const {
     return data_.at(token);
 }
+
+bool Database::containsToken(const Token &token) const{
+    return data_.count(token) > 0;
+}

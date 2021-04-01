@@ -55,7 +55,16 @@ SaveResult EncryptService::removeToken(const Token &token){
     return database->removeToken(token);
 }
 
-void EncryptService::createDecryptedData(const std::string &value, DecryptedData *decryptedData) {
-    memcpy(decryptedData->result, value.c_str(), value.size());
-    decryptedData->length = value.size();
+void EncryptService::createDecryptedData(const std::string &value, DecryptedData *outDecryptedData) {
+    memcpy(outDecryptedData->result, value.c_str(), value.size());
+    outDecryptedData->length = value.size();
+}
+
+bool EncryptService::containsToken(const Token &token){
+    return database->containsToken(token);
+}
+
+void EncryptService::decrypt(const Token &token, DecryptedData &outDecryptedData){
+     const EncryptedData data = database->getEncryptedData(token);
+    encryptor->decrypt(&data, &outDecryptedData);
 }

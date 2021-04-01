@@ -63,6 +63,8 @@ public:
 
     const EncryptedData &getEncryptedData(const Token &token) const;
 
+    bool containsToken(const Token &token) const;
+
 private:
     const char *path_;
     std::map<Token, EncryptedData> data_;

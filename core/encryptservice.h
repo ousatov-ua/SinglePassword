@@ -14,8 +14,10 @@ public:
     bool validatePass(const std::string &pass);
     std::vector<Token> getTokens() const;
     SaveResult encrypt(const Token &token, const DecryptedData &data);
+    void decrypt(const Token &token, DecryptedData &outDecryptedData);
     SaveResult removeToken(const Token &token);
-    void createDecryptedData(const std::string &value, DecryptedData *decryptedData);
+    void createDecryptedData(const std::string &value, DecryptedData *outDecryptedData);
+    bool containsToken(const Token &token);
 private:
     std::unique_ptr<Database> database;
     std::unique_ptr<Encryptor> encryptor;
