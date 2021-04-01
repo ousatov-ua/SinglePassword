@@ -28,12 +28,10 @@ void AddTokenDialog::on_saveButton__clicked()
         QMessageBox::information(this, "Error", "Wrong token name!");
         return;
     }
-
     if(data.size() == 0){
         QMessageBox::information(this, "Error", "No data to encrypt!");
         return;
     }
-
     const Token token = Token{.data = tokenValue.toStdString()};
     const std::string tokenData = data.toStdString();
     DecryptedData decryptedData{};
