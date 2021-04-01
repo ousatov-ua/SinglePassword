@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LoginWindow</class>
+ <widget class="QMainWindow" name="LoginWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Decrypt Base</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>170</y>
+      <width>371</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Please enter master password:</string>
+    </property>
+    <widget class="QPushButton" name="DecryptButton">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>130</y>
+       <width>113</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Decrypt</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>90</y>
+       <width>240</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Master password</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="masterPass"/>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

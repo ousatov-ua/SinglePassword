@@ -2,20 +2,23 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "core/encryptservice.h"
 
-QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
-QT_END_NAMESPACE
+namespace Ui {
+class MainWindow;
+}
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(EncryptService *encryptService, QWidget *parent = nullptr);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
+    EncryptService *enctyptService;
 };
+
 #endif // MAINWINDOW_H
