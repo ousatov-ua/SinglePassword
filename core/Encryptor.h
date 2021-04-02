@@ -37,7 +37,12 @@ struct DecryptedData {
     friend bool operator!=(const std::string &string, const DecryptedData &decryptedData) {
         return !(string == decryptedData);
     }
+
+
 };
+
+//std::string toStdString(const DecryptedData &decryptedData);
+
 
 
 struct EncryptedData {

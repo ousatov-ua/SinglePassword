@@ -15,7 +15,7 @@ class CreateDbWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit CreateDbWindow(EncryptService *encryptService, QWidget *parent = nullptr);
+    explicit CreateDbWindow(QWidget *parent = nullptr);
     ~CreateDbWindow();
 
 private slots:
@@ -24,7 +24,6 @@ private slots:
 private:
     Ui::CreateDbWindow *ui;
     LoginWindow *loginWindow;
-    EncryptService *encryptService;
 };
 
 #endif // CREATEDBWINDOW_H

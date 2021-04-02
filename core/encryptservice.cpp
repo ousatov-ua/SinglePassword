@@ -1,10 +1,20 @@
 #include "encryptservice.h"
 #include "util.h"
 
-EncryptService::EncryptService()
+EncryptService::EncryptService(const std::string &db)
 {
     this->encryptor = std::make_unique<Encryptor>();
-    this->database = std::make_unique<Database>("db.spdb");
+    this->database = std::make_unique<Database>(db.c_str());
+}
+
+static EncryptService *instance_ = nullptr;
+
+EncryptService *EncryptService::GetInstance(const std::string& value)
+{
+    if(instance_==nullptr){
+        instance_ = new EncryptService(value);
+    }
+    return instance_;
 }
 
 void EncryptService::initializeDb(const std::string &pass){
@@ -65,6 +75,12 @@ bool EncryptService::containsToken(const Token &token){
 }
 
 void EncryptService::decrypt(const Token &token, DecryptedData &outDecryptedData){
-     const EncryptedData data = database->getEncryptedData(token);
+    const EncryptedData data = database->getEncryptedData(token);
     encryptor->decrypt(&data, &outDecryptedData);
+}
+
+
+std::string EncryptService::toStdString(const DecryptedData &decryptedData){
+    std::string v = std::string((char*) decryptedData.result);
+    return v.substr(0, decryptedData.length);
 }

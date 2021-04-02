@@ -9,12 +9,11 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    EncryptService encService;
-    if(!encService.initialTokenExists()){
-        CreateDbWindow  *createDbWindow = new CreateDbWindow(&encService);
+    if(!EncryptService::GetInstance()->initialTokenExists()){
+        CreateDbWindow  *createDbWindow = new CreateDbWindow();
         createDbWindow ->show();
     }else{
-        LoginWindow *loginWindow = new LoginWindow(&encService);
+        LoginWindow *loginWindow = new LoginWindow();
         loginWindow->show();
     }
     return a.exec();

@@ -17,7 +17,7 @@ class AddTokenDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit AddTokenDialog(EncryptService *encryptService, QWidget *parent = nullptr);
+    explicit AddTokenDialog(QWidget *parent = nullptr);
     ~AddTokenDialog();
     void setMode(Mode mode);
     void setData(const Token &token, const DecryptedData &decryptedData);
@@ -31,7 +31,6 @@ protected:
 private:
     Mode mode =  CREATE;
     Ui::AddTokenDialog *ui;
-    EncryptService *encryptService;
     void closeDialog();
 
 };

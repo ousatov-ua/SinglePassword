@@ -14,7 +14,7 @@ class LoginWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    LoginWindow(EncryptService *encryptService, QWidget *parent = nullptr);
+    LoginWindow(QWidget *parent = nullptr);
     ~LoginWindow();
 
 private slots:
@@ -25,7 +25,6 @@ private slots:
 private:
     Ui::LoginWindow *ui;
     MainWindow *mainWindow;
-    EncryptService *encryptService;
 
     void decrypt();
 };

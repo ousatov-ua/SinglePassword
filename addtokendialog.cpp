@@ -4,13 +4,12 @@
 #include <QMessageBox>
 #include <QCloseEvent>
 
-AddTokenDialog::AddTokenDialog(EncryptService *encryptService, QWidget *parent) :
+AddTokenDialog::AddTokenDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddTokenDialog)
 {
 
     ui->setupUi(this);
-    this->encryptService = encryptService;
 }
 
 AddTokenDialog::~AddTokenDialog()
@@ -35,11 +34,11 @@ void AddTokenDialog::on_saveButton__clicked()
     }
     const std::string tokenData = data.toStdString();
     DecryptedData decryptedData{};
-    encryptService->createDecryptedData(tokenData, &decryptedData);
+    EncryptService::GetInstance()->createDecryptedData(tokenData, &decryptedData);
     switch (mode) {
 
     case CREATE:{
-        if(encryptService->containsToken(token)){
+        if(EncryptService::GetInstance()->containsToken(token)){
             QMessageBox::information(this, "Error", "The token already exists!");
             return;
         }
@@ -76,6 +75,7 @@ void AddTokenDialog::setMode(Mode mode){
 
 void AddTokenDialog::setData(const Token &token, const DecryptedData &decryptedData){
     this->ui->token_->setText(QString(token.data.c_str()));
-    this->ui->data_->document()->setPlainText(QString((char*)decryptedData.result));
+    this->ui->data_->document()->setPlainText(QString(EncryptService::GetInstance()->toStdString(decryptedData).c_str()));
+
 }
 

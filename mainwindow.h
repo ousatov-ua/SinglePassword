@@ -16,10 +16,11 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(EncryptService *encryptService, QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     bool addToken(const Token &token, const DecryptedData &decryptedData, Mode mode);
     void removeToken(const Token &token);
+
 
 private slots:
     void on_addToken__clicked();
@@ -32,9 +33,9 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    EncryptService *encryptService;
     QStringListModel *model= nullptr;
     AddTokenDialog *addTokenDialog = nullptr;
+    void selectionUpdated(const QModelIndex &qmodelIndex);
 
 };
 

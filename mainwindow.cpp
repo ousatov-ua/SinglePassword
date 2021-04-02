@@ -2,17 +2,16 @@
 #include "ui_mainwindow.h"
 #include <QMessageBox>
 
-MainWindow::MainWindow(EncryptService * encryptService, QWidget *parent) :
+MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->encryptService = encryptService;
 
     model = new QStringListModel(this);
     QStringList tokens;
 
-    foreach(const Token token,encryptService->getTokens()){
+    foreach(const Token token,EncryptService::GetInstance()->getTokens()){
         const std::string str = token.data;
         tokens << str.c_str();
     }
@@ -30,17 +29,22 @@ MainWindow::~MainWindow()
     if(addTokenDialog !=nullptr){
         delete addTokenDialog;
     }
-    delete encryptService;
     delete ui;
 
 }
 
 bool MainWindow::addToken(const Token &token, const DecryptedData &decryptedData, Mode mode){
-    SaveResult saveResult = encryptService->encrypt(token, decryptedData);
+    SaveResult saveResult = EncryptService::GetInstance()->encrypt(token, decryptedData);
     if(mode == CREATE && saveResult == SAVE_SUCCESS){
         if(model->insertRow(model->rowCount())) {
             QModelIndex index = model->index(model->rowCount() - 1, 0);
             model->setData(index, QString(token.data.c_str()));
+        }
+    }
+    if(mode == EDIT){
+        auto indexes = ui->tokensList_->selectionModel()->selectedIndexes();
+        if(!indexes.isEmpty()){
+            selectionUpdated(indexes.first());
         }
     }
     return saveResult == SAVE_SUCCESS;
@@ -48,10 +52,11 @@ bool MainWindow::addToken(const Token &token, const DecryptedData &decryptedData
 
 void MainWindow::removeToken(const Token &token){
 
-    SaveResult result = encryptService->removeToken(token);
+    SaveResult result = EncryptService::GetInstance()->removeToken(token);
     if(result == SAVE_SUCCESS){
         QModelIndex index = ui->tokensList_->selectionModel()->selectedIndexes().at(0);
         model->removeRow(index.row());
+        this->ui->tokenValue_->document()->clear();
     }else{
         QMessageBox::information(this, "Remove token", "Cannot remove token");
     }
@@ -63,7 +68,7 @@ void MainWindow::on_addToken__clicked()
         addTokenDialog->setMode(CREATE);
 
     }else{
-        addTokenDialog = new AddTokenDialog(this->encryptService, this);
+        addTokenDialog = new AddTokenDialog(this);
     }
     addTokenDialog->show();
 }
@@ -78,14 +83,18 @@ void MainWindow::on_deleteToken__clicked()
     }
 }
 
+void MainWindow::selectionUpdated(const QModelIndex &index)
+{
+    Token token { .data = index.data(Qt::DisplayRole).toString().toStdString() };
+    DecryptedData decryptedData{};
+    EncryptService::GetInstance()->decrypt(token, decryptedData);
+    ui->tokenValue_->document()->setPlainText(QString(EncryptService::GetInstance()->toStdString(decryptedData).c_str()));
+}
+
 void MainWindow::token_selectionChanged(QItemSelection itemSelection){
     if(!itemSelection.indexes().isEmpty()){
-        auto index = itemSelection.indexes().first();
-        Token token { .data = index.data(Qt::DisplayRole).toString().toStdString() };
-        DecryptedData decryptedData{};
-        encryptService->decrypt(token, decryptedData);
-        std::string result = std::string((char*)decryptedData.result);
-        ui->tokenValue_->document()->setPlainText(QString(result.c_str()));
+        const auto index = itemSelection.indexes().first();
+        selectionUpdated(index);
     }
 }
 
@@ -99,9 +108,9 @@ void MainWindow::on_editToken__clicked()
     auto index = indexes.first();
     Token token { .data = index.data(Qt::DisplayRole).toString().toStdString() };
     DecryptedData decryptedData{};
-    encryptService->decrypt(token, decryptedData);
+    EncryptService::GetInstance()->decrypt(token, decryptedData);
     if(addTokenDialog == nullptr){
-        addTokenDialog = new AddTokenDialog(this->encryptService, this);
+        addTokenDialog = new AddTokenDialog(this);
     }
 
     addTokenDialog->setData(token, decryptedData);

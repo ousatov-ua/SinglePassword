@@ -5,11 +5,10 @@
 #include "loginwindow.h"
 
 
-CreateDbWindow::CreateDbWindow(EncryptService *encryptService, QWidget *parent) :
+CreateDbWindow::CreateDbWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::CreateDbWindow)
 {
-    this->encryptService = encryptService;
     ui->setupUi(this);
 }
 
@@ -27,9 +26,9 @@ void CreateDbWindow::on_create__clicked()
     }else if(pass.length() < KEY_MIN_LENGTH){
         QMessageBox::information(this, "Master password", "Password is too short!");
     }else{
-        encryptService->initializeDb(pass.toStdString());
+        EncryptService::GetInstance()->initializeDb(pass.toStdString());
         hide();
-        loginWindow = new LoginWindow(encryptService, this);
+        loginWindow = new LoginWindow(this);
         loginWindow->show();
     }
 }
