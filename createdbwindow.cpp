@@ -27,6 +27,7 @@ void CreateDbWindow::on_create__clicked()
     }else if(pass.length() < KEY_MIN_LENGTH){
         QMessageBox::information(this, "Master password", "Password is too short!");
     }else{
+        encryptService->initializeDb(pass.toStdString());
         hide();
         loginWindow = new LoginWindow(encryptService, this);
         loginWindow->show();
