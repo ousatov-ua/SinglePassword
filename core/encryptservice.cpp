@@ -42,7 +42,6 @@ bool EncryptService::validatePass(const std::string &pass){
         const Token initialToken{.data = INITIAL_TOKEN};
         std::string initValue = INITIAL_VALUE;
         EncryptedData encryptedData = database->getEncryptedData(initialToken);
-        EncKeys encKeys{};
         Util::getEncKeys(encryptor->getEncKeys(), pass);
         encryptor->decrypt(&encryptedData, &decryptedData);
         return initValue == decryptedData;
@@ -58,6 +57,11 @@ std::vector<Token> EncryptService::getTokens() const {
 SaveResult EncryptService::encrypt(const Token &token, const DecryptedData &decryptedData){
     EncryptedData encryptedData;
     encryptor->encrypt(&decryptedData, &encryptedData);
+    DecryptedData outDecryptedData{};
+    encryptor->decrypt(&encryptedData, &outDecryptedData);
+    if(toStdString(decryptedData)!= toStdString(outDecryptedData)){
+        throw DecryptException("Cannot verify decryption!");
+    }
     return database->addToken(token, encryptedData);
 }
 

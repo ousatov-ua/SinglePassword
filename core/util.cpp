@@ -1,4 +1,7 @@
 #include "util.h"
+#include <openssl/evp.h>
+#include <QByteArray>
+#include "encryptservice.h"
 
 Util::Util()
 {
@@ -6,19 +9,10 @@ Util::Util()
 }
 
 void Util::getEncKeys(EncKeys *encKeys, const std::string &masterPass) {
-    unsigned char key[KEY_LENGTH];
-    int length = masterPass.size();
-    strcpy(reinterpret_cast<char *>(key), masterPass.c_str());
-    if (length < KEY_LENGTH) {
-            while (length < KEY_LENGTH) {
-                key[length] = KEY_SPACE;
-                length++;
-            }
-        }
-
-
-        unsigned char iv[VI_LENGTH];
-        memcpy(iv, key, VI_LENGTH);
-        encKeys->key = std::string((char *) key);
-        encKeys->iv = std::string((char *) iv);
+    const EVP_CIPHER *cipher;
+    const unsigned char *salt = NULL;
+    cipher = EVP_get_cipherbyname("aes-256-cbc");
+    EVP_BytesToKey(cipher, EVP_get_digestbyname("md5"), salt,
+               (unsigned char *) masterPass.c_str(),
+               masterPass.size(), 1, encKeys->key,  encKeys->iv);
 }

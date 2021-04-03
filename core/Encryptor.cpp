@@ -32,8 +32,8 @@ void Encryptor::encrypt(const DecryptedData *decryptedData,
         if (!(ctx = EVP_CIPHER_CTX_new()))
             throw EncryptException("Cannot initialize context");
 
-        if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, (unsigned char *) encKeys_->key.c_str(),
-                        (unsigned char *) encKeys_->iv.c_str())) {
+        if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, encKeys_->key,
+                        encKeys_->iv)) {
             throw EncryptException("Cannot initialize encryption");
         }
 
@@ -74,8 +74,8 @@ void Encryptor::decrypt(const EncryptedData *encryptedData,
             throw DecryptException("Cannot initialize context");
         }
 
-        if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, (unsigned char *) encKeys_->key.c_str(),
-                        (unsigned char *) encKeys_->iv.c_str())) {
+        if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, encKeys_->key,
+                        encKeys_->iv)) {
             throw DecryptException("Cannot initialize decryption");
         }
 
@@ -92,6 +92,7 @@ void Encryptor::decrypt(const EncryptedData *encryptedData,
 
         EVP_CIPHER_CTX_free(ctx);
         outDecryptedData->length = plaintext_len;
+        //outDecryptedData->result[plaintext_len] = '\0';
     } catch (std::exception &e) {
         logException();
         throw;

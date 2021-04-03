@@ -8,16 +8,14 @@
 #include <string>
 #include <array>
 #include <boost/serialization/access.hpp>
+#include <openssl/evp.h>
 
 #define BUFFER_SIZE 4096
-#define KEY_LENGTH 32
-#define VI_LENGTH 16
-#define KEY_MIN_LENGTH 8
-#define KEY_SPACE '$'
+#define PASS_MIN_LENGTH 8
 
 struct EncKeys {
-    std::string key;
-    std::string iv;
+    unsigned char key [EVP_MAX_KEY_LENGTH];
+    unsigned char iv [EVP_MAX_IV_LENGTH];
 };
 
 struct DecryptedData {

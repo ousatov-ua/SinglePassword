@@ -23,7 +23,7 @@ void CreateDbWindow::on_create__clicked()
     QString r_pass = ui->r_pass_->text();
     if(pass != r_pass){
         QMessageBox::information(this, "Master password", "Enetered password are not the same!");
-    }else if(pass.length() < KEY_MIN_LENGTH){
+    }else if(pass.length() < PASS_MIN_LENGTH){
         QMessageBox::information(this, "Master password", "Password is too short!");
     }else{
         EncryptService::GetInstance()->initializeDb(pass.toStdString());
