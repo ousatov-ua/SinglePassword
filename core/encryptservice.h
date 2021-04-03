@@ -10,7 +10,7 @@ class EncryptService
 public:
     EncryptService(EncryptService &other) = delete;
     void operator=(const EncryptService &) = delete;
-    static EncryptService *GetInstance(const std::string& value = "db.spdb");
+    static EncryptService *GetInstance(const std::string* value = nullptr);
     void initializeDb(const std::string &pass);
     bool initialTokenExists();
     bool validatePass(const std::string &pass);
@@ -22,7 +22,7 @@ public:
     bool containsToken(const Token &token);
     std::string toStdString(const DecryptedData &decryptedData);
 private:
-    EncryptService(const std::string &db);
+    EncryptService(const std::string db);
     std::unique_ptr<Database> database;
     std::unique_ptr<Encryptor> encryptor;
 

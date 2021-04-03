@@ -1,18 +1,40 @@
 #include "encryptservice.h"
 #include "util.h"
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/path.hpp>
 
-EncryptService::EncryptService(const std::string &db)
+namespace fs = boost::filesystem;
+
+EncryptService::EncryptService(const std::string db)
 {
     this->encryptor = std::make_unique<Encryptor>();
-    this->database = std::make_unique<Database>(db.c_str());
+    this->database = std::make_unique<Database>(db);
 }
 
 static EncryptService *instance_ = nullptr;
 
-EncryptService *EncryptService::GetInstance(const std::string& value)
+EncryptService *EncryptService::GetInstance(const std::string* value)
 {
     if(instance_==nullptr){
-        instance_ = new EncryptService(value);
+        if(value == nullptr){
+            const char *homedir;
+
+            if ((homedir = getenv("HOME")) == NULL) {
+                homedir = getpwuid(getuid())->pw_dir;
+            }
+            fs::path path_s(std::string(homedir) + "/.singlePass");
+            if(!fs::exists(path_s)){
+                fs::create_directory(path_s);
+            }
+            std::string db = path_s.string() +  "/db.spdb";
+            instance_ = new EncryptService(db);
+        }else{
+            instance_ = new EncryptService(*value);
+        }
+
     }
     return instance_;
 }
@@ -55,14 +77,20 @@ std::vector<Token> EncryptService::getTokens() const {
 }
 
 SaveResult EncryptService::encrypt(const Token &token, const DecryptedData &decryptedData){
-    EncryptedData encryptedData;
-    encryptor->encrypt(&decryptedData, &encryptedData);
-    DecryptedData outDecryptedData{};
-    encryptor->decrypt(&encryptedData, &outDecryptedData);
-    if(toStdString(decryptedData)!= toStdString(outDecryptedData)){
-        throw DecryptException("Cannot verify decryption!");
+    EncryptedData encryptedData{};
+
+    try{
+        encryptor->encrypt(&decryptedData, &encryptedData);
+        DecryptedData outDecryptedData{};
+        encryptor->decrypt(&encryptedData, &outDecryptedData);
+        if(toStdString(decryptedData)!= toStdString(outDecryptedData)){
+            //BOOST_LOG_TRIVIAL(error) << "Cannot encrypt data";
+            return SAVE_FAILED;
+        }
+        return database->addToken(token, encryptedData);
+    } catch(const std::exception &e){
+        return SAVE_FAILED;
     }
-    return database->addToken(token, encryptedData);
 }
 
 SaveResult EncryptService::removeToken(const Token &token){
@@ -71,7 +99,9 @@ SaveResult EncryptService::removeToken(const Token &token){
 
 void EncryptService::createDecryptedData(const std::string &value, DecryptedData *outDecryptedData) {
     memcpy(outDecryptedData->result, value.c_str(), value.size());
-    outDecryptedData->length = value.size();
+    int length = value.size() +1;
+    outDecryptedData->result[length] = '\0';
+    outDecryptedData->length =length;
 }
 
 bool EncryptService::containsToken(const Token &token){

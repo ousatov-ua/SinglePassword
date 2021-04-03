@@ -81,7 +81,7 @@ void Encryptor::decrypt(const EncryptedData *encryptedData,
 
         if (1 != EVP_DecryptUpdate(ctx, outDecryptedData->result, &len, (unsigned char *) encryptedData->rawData.c_str(),
                        encryptedData->length)) {
-            throw DecryptException("cannot decrypt message");
+            throw DecryptException("Cannot decrypt message");
         }
         plaintext_len = len;
 

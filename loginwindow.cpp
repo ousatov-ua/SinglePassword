@@ -28,7 +28,13 @@ void LoginWindow::on_masterPass_returnPressed()
 
 void LoginWindow::decrypt(){
     std::string masterPass = ui->masterPass->text().toStdString();
-    bool result = EncryptService::GetInstance()->validatePass(masterPass);
+    bool result = false;
+    try{
+        result = EncryptService::GetInstance()->validatePass(masterPass);
+    }catch (std::exception &e) {
+        QMessageBox::information(this, "Wrong password", "Wrong password provided!");
+        return;
+    }
     if(!result){
         QMessageBox::information(this, "Wrong password", "Wrong password provided!");
         return;

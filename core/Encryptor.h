@@ -10,7 +10,7 @@
 #include <boost/serialization/access.hpp>
 #include <openssl/evp.h>
 
-#define BUFFER_SIZE 4096
+#define BUFFER_SIZE 1024
 #define PASS_MIN_LENGTH 8
 
 struct EncKeys {
@@ -20,7 +20,7 @@ struct EncKeys {
 
 struct DecryptedData {
     unsigned char result[BUFFER_SIZE];
-    int length;
+    int length = BUFFER_SIZE;
 
     friend std::ostream &operator<<(std::ostream &ostream, const DecryptedData &decryptedData) {
         std::string_view v = std::string_view((char *) decryptedData.result);

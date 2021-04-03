@@ -50,8 +50,10 @@ static std::ostream &operator<<(std::ostream &os, Token &arg) {
 }
 
 class Database {
+
 public:
-    explicit Database(const char *file);
+
+    explicit Database(const std::string file);
 
     bool tokenExists(const Token &token) const;
 
@@ -66,7 +68,7 @@ public:
     bool containsToken(const Token &token) const;
 
 private:
-    const char *path_;
+    const std::string path_;
     std::map<Token, EncryptedData> data_;
 
     SaveResult save();

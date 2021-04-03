@@ -8,8 +8,8 @@
 
 using namespace boost::archive;
 
-Database::Database(const char *path) : path_(path) {
-    std::ifstream file(path, std::ios::binary);
+Database::Database(const std::string path):path_(path) {
+    std::ifstream file(path_, std::ios::binary);
     if (!file.is_open()) {
         data_ = std::map<Token, EncryptedData>();
         return;

@@ -44,11 +44,13 @@ void AddTokenDialog::on_saveButton__clicked()
         }
     }
     }
-    if(mainWindow->addToken(token, decryptedData, mode)){
+
+    bool result = mainWindow->addToken(token, decryptedData, mode);
+    if(result){
         closeDialog();
-    }else{
-        QMessageBox::information(this, "Error", "Cannot save data!");
+        return;
     }
+        QMessageBox::information(this, "Error", "Cannot save data!");
 }
 
 void AddTokenDialog::on_cancelButton__clicked()
