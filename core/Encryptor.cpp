@@ -26,7 +26,6 @@ void Encryptor::encrypt(const DecryptedData *decryptedData,
 
         int len;
 
-        unsigned char result[BUFFER_SIZE];
         int ciphertext_len;
 
         if (!(ctx = EVP_CIPHER_CTX_new()))
@@ -37,19 +36,17 @@ void Encryptor::encrypt(const DecryptedData *decryptedData,
             throw EncryptException("Cannot initialize encryption");
         }
 
-        if (1 != EVP_EncryptUpdate(ctx, result, &len, decryptedData->result, decryptedData->length)) {
+        if (1 != EVP_EncryptUpdate(ctx, outEncryptedData->data, &len, decryptedData->data, decryptedData->length)) {
             throw EncryptException("Cannot encrypt");
         }
         ciphertext_len = len;
 
-        if (1 != EVP_EncryptFinal_ex(ctx, result + len, &len)) {
+        if (1 != EVP_EncryptFinal_ex(ctx, outEncryptedData->data + len, &len)) {
             throw EncryptException("Validation failed");
         }
         ciphertext_len += len;
 
         EVP_CIPHER_CTX_free(ctx);
-
-        outEncryptedData->rawData = std::string((char *) result);
         outEncryptedData->length = ciphertext_len;
     } catch (std::exception &e) {
         logException();
@@ -79,13 +76,13 @@ void Encryptor::decrypt(const EncryptedData *encryptedData,
             throw DecryptException("Cannot initialize decryption");
         }
 
-        if (1 != EVP_DecryptUpdate(ctx, outDecryptedData->result, &len, (unsigned char *) encryptedData->rawData.c_str(),
+        if (1 != EVP_DecryptUpdate(ctx, outDecryptedData->data, &len, encryptedData->data,
                        encryptedData->length)) {
             throw DecryptException("Cannot decrypt message");
         }
         plaintext_len = len;
 
-        if (1 != EVP_DecryptFinal_ex(ctx, outDecryptedData->result + len, &len)) {
+        if (1 != EVP_DecryptFinal_ex(ctx, outDecryptedData->data + len, &len)) {
             throw DecryptException("Validation failed");
         }
         plaintext_len += len;

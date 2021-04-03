@@ -19,16 +19,16 @@ struct EncKeys {
 };
 
 struct DecryptedData {
-    unsigned char result[BUFFER_SIZE];
-    int length = BUFFER_SIZE;
+    unsigned char data[BUFFER_SIZE];
+    int length;
 
     friend std::ostream &operator<<(std::ostream &ostream, const DecryptedData &decryptedData) {
-        std::string_view v = std::string_view((char *) decryptedData.result);
+        std::string_view v = std::string_view((char *) decryptedData.data);
         return ostream << v.substr(0, decryptedData.length);
     }
 
     friend bool operator==(const std::string &string, const DecryptedData &decryptedData) {
-        std::string_view v = std::string_view((char *) decryptedData.result);
+        std::string_view v = std::string_view((char *) decryptedData.data);
         return string == v.substr(0, decryptedData.length);
     }
 
@@ -44,14 +44,14 @@ struct DecryptedData {
 
 
 struct EncryptedData {
-    std::string rawData;
+    unsigned char data[BUFFER_SIZE];
     int length;
 private:
     friend class boost::serialization::access;
 
     template<typename Archive>
     void serialize(Archive &ar, const unsigned int version) {
-        ar & rawData;
+        ar & data;
         ar & length;
     }
 };
