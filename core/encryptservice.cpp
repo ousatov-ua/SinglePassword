@@ -99,8 +99,7 @@ SaveResult EncryptService::removeToken(const Token &token){
 
 void EncryptService::createDecryptedData(const std::string &value, DecryptedData *outDecryptedData) {
     memcpy(outDecryptedData->data, value.c_str(), value.size());
-    //int length = value.size() +1;
-    //outDecryptedData->data[length] = '\0';
+    outDecryptedData->data[value.size()] = '\0';
     outDecryptedData->length =value.size();
 }
 
@@ -116,5 +115,5 @@ void EncryptService::decrypt(const Token &token, DecryptedData &outDecryptedData
 
 std::string EncryptService::toStdString(const DecryptedData &decryptedData){
     std::string v = std::string((char*) decryptedData.data);
-    return v.substr(0, decryptedData.length);
+    return v;
 }

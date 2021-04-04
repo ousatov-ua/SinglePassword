@@ -29,6 +29,8 @@ private slots:
 
     void token_selectionChanged(QItemSelection item);
 
+    void currentChanged(QModelIndex current,QModelIndex previous);
+
     void on_editToken__clicked();
 
 private:

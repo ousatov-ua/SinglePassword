@@ -80,6 +80,7 @@ void MainWindow::on_deleteToken__clicked()
         auto index = indexes.first();
         Token token { .data = index.data(Qt::DisplayRole).toString().toStdString() };
         removeToken(token);
+        ui->tokensList_->clearSelection();
     }
 }
 
@@ -88,7 +89,8 @@ void MainWindow::selectionUpdated(const QModelIndex &index)
     Token token { .data = index.data(Qt::DisplayRole).toString().toStdString() };
     DecryptedData decryptedData{};
     EncryptService::GetInstance()->decrypt(token, decryptedData);
-    ui->tokenValue_->document()->setPlainText(QString(EncryptService::GetInstance()->toStdString(decryptedData).c_str()));
+    const auto value = QString(EncryptService::GetInstance()->toStdString(decryptedData).c_str());
+    ui->tokenValue_->document()->setPlainText(value);
 }
 
 void MainWindow::token_selectionChanged(QItemSelection itemSelection){
