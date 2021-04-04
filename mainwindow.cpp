@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->tokensList_->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this,
         SLOT(token_selectionChanged(QItemSelection)));
+
 }
 
 MainWindow::~MainWindow()

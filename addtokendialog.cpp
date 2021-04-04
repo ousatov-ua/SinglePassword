@@ -50,7 +50,7 @@ void AddTokenDialog::on_saveButton__clicked()
         closeDialog();
         return;
     }
-        QMessageBox::information(this, "Error", "Cannot save data!");
+    QMessageBox::information(this, "Error", "Cannot save data!");
 }
 
 void AddTokenDialog::on_cancelButton__clicked()
@@ -72,7 +72,7 @@ void AddTokenDialog::closeEvent(QCloseEvent * event){
 void AddTokenDialog::setMode(Mode mode){
     this->mode = mode;
     bool readOnly = mode == EDIT;
-        this->ui->token_->setReadOnly(readOnly);
+    this->ui->token_->setReadOnly(readOnly);
 }
 
 void AddTokenDialog::setData(const Token &token, const DecryptedData &decryptedData){
@@ -81,3 +81,20 @@ void AddTokenDialog::setData(const Token &token, const DecryptedData &decryptedD
 
 }
 
+
+void AddTokenDialog::on_data__textChanged()
+{
+
+    auto textEdit = ui->data_;
+    auto maxLengh = BUFFER_SIZE/2-1;
+    if(textEdit->toPlainText().length() > maxLengh)
+    {
+        int diff = textEdit->toPlainText().length() - maxLengh;
+        QString newStr = textEdit->toPlainText();
+        newStr.chop(diff);
+        textEdit->setPlainText(newStr);
+        QTextCursor cursor(textEdit->textCursor());
+        cursor.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+        textEdit->setTextCursor(cursor);
+    }
+}

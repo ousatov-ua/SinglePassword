@@ -26,6 +26,8 @@ private slots:
     void on_saveButton__clicked();
 
     void on_cancelButton__clicked();
+    void on_data__textChanged();
+
 protected:
     void closeEvent(QCloseEvent *) override;
 private:
