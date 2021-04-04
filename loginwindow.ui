@@ -39,7 +39,7 @@
       <string>Decrypt</string>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -57,7 +57,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="masterPass"/>
+       <widget class="QLineEdit" name="masterPass">
+        <property name="maxLength">
+         <number>15</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
