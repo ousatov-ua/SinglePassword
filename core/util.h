@@ -7,9 +7,12 @@
 class Util
 {
 public:
-    Util();
 
     static void getEncKeys(EncKeys *encKeys, const std::string &masterPass);
+
+private:
+    Util();
+
 };
 
 #endif // UTIL_H
