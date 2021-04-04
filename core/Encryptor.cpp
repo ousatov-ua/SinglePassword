@@ -89,6 +89,7 @@ void Encryptor::decrypt(const EncryptedData *encryptedData,
 
         EVP_CIPHER_CTX_free(ctx);
         outDecryptedData->length = plaintext_len;
+        outDecryptedData->data[plaintext_len] = '\0';
     } catch (std::exception &e) {
         logException();
         throw;
