@@ -1,8 +1,8 @@
-#include "loginwindow.h"
+#include "app/loginwindow.h"
 
 #include <QApplication>
 #include "core/Database.h"
-#include "createdbwindow.h"
+#include "app/createdbwindow.h"
 #include "core/encryptservice.h"
 
 int main(int argc, char *argv[])

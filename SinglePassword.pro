@@ -12,31 +12,32 @@ CONFIG += static
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    addtokendialog.cpp \
+    app/addtokendialog.cpp \
+    app/createdbwindow.cpp \
+    app/loginwindow.cpp \
+    app/mainwindow.cpp \
     core/encryptservice.cpp \
     core/util.cpp \
-    createdbwindow.cpp \
-    loginwindow.cpp \
     main.cpp \
-    mainwindow.cpp \
     core/Encryptor.cpp \
     core/Database.cpp
 
 HEADERS += \
-    addtokendialog.h \
+    app/addtokendialog.h \
+    app/createdbwindow.h \
+    app/loginwindow.h \
+    app/mainwindow.h \
     core/encryptservice.h \
     core/util.h \
-    createdbwindow.h \
-    loginwindow.h \
     mainwindow.h \
     core/Encryptor.h \
     core/Database.h
 
 FORMS += \
-    addtokendialog.ui \
-    createdbwindow.ui \
-    loginwindow.ui \
-    mainwindow.ui
+    ui/addtokendialog.ui \
+    ui/createdbwindow.ui \
+    ui/loginwindow.ui \
+    ui/mainwindow.ui
 
 TRANSLATIONS += \
     SinglePassword_uk_UA.ts
