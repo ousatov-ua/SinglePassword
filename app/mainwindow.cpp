@@ -9,19 +9,31 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     model = new QStringListModel(this);
-    QStringList tokens;
-
-    foreach(const Token token,EncryptService::GetInstance()->getTokens()){
-        const std::string str = token.data;
-        tokens << str.c_str();
-    }
-    model->setStringList(tokens);
     ui->tokensList_->setModel(model);
     ui->tokensList_->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     connect(ui->tokensList_->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this,
         SLOT(token_selectionChanged(QItemSelection)));
 
+    showTokens();
+}
+
+void MainWindow::showTokens(const QString *filter){
+    QStringList tokens;
+    std::string normalizedFilter;
+    if(filter!=nullptr){
+        normalizedFilter = filter->trimmed().toLower().toStdString();
+    }
+    bool doFilter = filter!=nullptr && normalizedFilter.size() !=0;
+    foreach(const Token token,EncryptService::GetInstance()->getTokens()){
+        const char* token_cstr = token.data.c_str();
+        const std::string tokenValueLow = QString(token_cstr).toLower().toStdString();
+        if(doFilter && (tokenValueLow.find(normalizedFilter)==std::string::npos)){
+            continue;
+        }
+        tokens << token_cstr;
+    }
+    model->setStringList(tokens);
 }
 
 MainWindow::~MainWindow()
@@ -120,4 +132,9 @@ void MainWindow::on_editToken__clicked()
     addTokenDialog->setMode(EDIT);
     addTokenDialog->show();
 
+}
+
+void MainWindow::on_search__textChanged(const QString &text)
+{
+    showTokens(&text);
 }

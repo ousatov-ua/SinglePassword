@@ -31,11 +31,14 @@ private slots:
 
     void on_editToken__clicked();
 
+    void on_search__textChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
     QStringListModel *model= nullptr;
     AddTokenDialog *addTokenDialog = nullptr;
     void selectionUpdated(const QModelIndex &qmodelIndex);
+    void showTokens(const QString *filter = nullptr);
 
 };
 
