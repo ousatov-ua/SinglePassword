@@ -21,8 +21,7 @@ void Util::getEncKeys(EncKeys *encKeys, const std::string &masterPass) {
 
 
 void Util::toToken(std::string plainToken, Token &outToken){
-    DecryptedData decryptedToken{};
-    EncryptService::GetInstance()->createDecryptedData(plainToken, &decryptedToken);
+    DecryptedData decryptedToken = EncryptService::GetInstance()->createDecryptedData(plainToken);
     EncryptService::GetInstance()->encryptToken(outToken, decryptedToken);
 }
 

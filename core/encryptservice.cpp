@@ -49,8 +49,7 @@ void EncryptService::initializeDb(const std::string &pass){
     Util::toToken(INITIAL_TOKEN, initialToken);
 
     EncryptedData encryptedData{};
-    DecryptedData decryptedData{};
-    createDecryptedData(INITIAL_VALUE, &decryptedData);
+    DecryptedData decryptedData = createDecryptedData(INITIAL_VALUE);
     encryptor->encrypt(&decryptedData, &encryptedData);
     database->addToken(initialToken, encryptedData);
 }
@@ -123,10 +122,12 @@ SaveResult EncryptService::removeToken(const Token &token){
     return database->removeToken(token);
 }
 
-void EncryptService::createDecryptedData(const std::string &value, DecryptedData *outDecryptedData) {
-    memcpy(outDecryptedData->data, value.c_str(), value.size());
-    outDecryptedData->data[value.size()] = '\0';
-    outDecryptedData->length =value.size();
+DecryptedData EncryptService::createDecryptedData(const std::string &value) {
+    DecryptedData decryptedData{};
+    memcpy(decryptedData.data, value.c_str(), value.size());
+    decryptedData.data[value.size()] = '\0';
+    decryptedData.length =value.size();
+    return decryptedData;
 }
 
 bool EncryptService::containsToken(const Token &token){

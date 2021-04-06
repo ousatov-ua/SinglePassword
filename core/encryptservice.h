@@ -20,7 +20,7 @@ public:
     void decryptValue(const Token &token, DecryptedData &outDecryptedData);
     void decrypt(const EncryptedData& encryptedData, DecryptedData &outDecryptedData);
     SaveResult removeToken(const Token &token);
-    void createDecryptedData(const std::string &value, DecryptedData *outDecryptedData);
+    DecryptedData createDecryptedData(const std::string &value);
     bool containsToken(const Token &token);
     std::string toStdString(const DecryptedData &decryptedData);
 private:
