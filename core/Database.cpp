@@ -36,9 +36,7 @@ bool Database::tokenExists(const Token &token) const {
 std::vector<Token> Database::getTokens() const {
     std::vector<Token> tokens;
     for (auto const &imap: data_) {
-        //if (imap.first.data != INITIAL_TOKEN) {
-            tokens.push_back(imap.first);
-        //}
+        tokens.push_back(imap.first);
     }
     return tokens;
 }
