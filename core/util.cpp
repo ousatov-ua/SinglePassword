@@ -1,7 +1,7 @@
 #include "util.h"
 #include <openssl/evp.h>
 #include <QByteArray>
-#include "encryptservice.h"
+
 
 Util::Util()
 {
@@ -17,4 +17,15 @@ void Util::getEncKeys(EncKeys *encKeys, const std::string &masterPass) {
     EVP_BytesToKey(cipher, EVP_get_digestbyname("md5"), salt,
                (unsigned char *) masterPass.c_str(),
                masterPass.size(), 1, encKeys->key,  encKeys->iv);
+}
+
+
+void Util::toToken(std::string plainToken, Token &outToken){
+    DecryptedData decryptedToken{};
+    EncryptService::GetInstance()->createDecryptedData(plainToken, &decryptedToken);
+    EncryptService::GetInstance()->encryptToken(outToken, decryptedToken);
+}
+
+void Util::toPlainToken(const Token &token, DecryptedData &outDecryptedData){
+    EncryptService::GetInstance()->decrypt(token.data, outDecryptedData);
 }

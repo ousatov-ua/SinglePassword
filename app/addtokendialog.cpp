@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include <QMessageBox>
 #include <QCloseEvent>
+#include "core/util.h"
 
 AddTokenDialog::AddTokenDialog(QWidget *parent) :
     QDialog(parent),
@@ -20,8 +21,10 @@ AddTokenDialog::~AddTokenDialog()
 void AddTokenDialog::on_saveButton__clicked()
 {
     MainWindow *mainWindow = (MainWindow*)this->parent();
-    QString tokenValue = this->ui->token_->text().simplified();
-    const Token token = Token{.data = tokenValue.toStdString()};
+    std::string tokenValue = this->ui->token_->text().simplified().toStdString();
+
+    Token token{};
+    Util::toToken(tokenValue, token);
 
     QString data = this->ui->data_->toPlainText();
     if(tokenValue.size() == 0){
@@ -76,7 +79,9 @@ void AddTokenDialog::setMode(Mode mode){
 }
 
 void AddTokenDialog::setData(const Token &token, const DecryptedData &decryptedData){
-    this->ui->token_->setText(QString(token.data.c_str()));
+    DecryptedData plainToken{};
+    EncryptService::GetInstance()->decrypt(token.data, plainToken);
+    this->ui->token_->setText(QString((char*)plainToken.data));
     this->ui->data_->document()->setPlainText(QString(EncryptService::GetInstance()->toStdString(decryptedData).c_str()));
 
 }

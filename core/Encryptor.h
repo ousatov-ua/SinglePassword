@@ -20,7 +20,7 @@ struct EncKeys {
 
 struct DecryptedData {
     unsigned char data[BUFFER_SIZE];
-    int length;
+    size_t length;
 
     friend std::ostream &operator<<(std::ostream &ostream, const DecryptedData &decryptedData) {
         std::string_view v = std::string_view((char *) decryptedData.data);
@@ -39,13 +39,10 @@ struct DecryptedData {
 
 };
 
-//std::string toStdString(const DecryptedData &decryptedData);
-
-
 
 struct EncryptedData {
     unsigned char data[BUFFER_SIZE];
-    int length;
+    size_t length;
 private:
     friend class boost::serialization::access;
 

@@ -15,8 +15,10 @@ public:
     bool initialTokenExists();
     bool validatePass(const std::string &pass);
     std::vector<Token> getTokens() const;
+    bool encryptToken(Token &outToken, const DecryptedData &data);
     SaveResult encrypt(const Token &token, const DecryptedData &data);
-    void decrypt(const Token &token, DecryptedData &outDecryptedData);
+    void decryptValue(const Token &token, DecryptedData &outDecryptedData);
+    void decrypt(const EncryptedData& encryptedData, DecryptedData &outDecryptedData);
     SaveResult removeToken(const Token &token);
     void createDecryptedData(const std::string &value, DecryptedData *outDecryptedData);
     bool containsToken(const Token &token);
@@ -25,7 +27,8 @@ private:
     EncryptService(const std::string db);
     std::unique_ptr<Database> database;
     std::unique_ptr<Encryptor> encryptor;
-
+    bool encrypt(EncryptedData &outEncryptedData, const DecryptedData &decryptedData);
+    bool databaseExists;
 };
 
 #endif // ENCRYPTSERVICE_H

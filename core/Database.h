@@ -25,15 +25,12 @@ using SaveResult = int;
 
 
 struct Token {
-    std::string data;
-
-    std::string toString() const {
-        return "Token(data = " + data + ")";
-    }
+    EncryptedData data;
 
     bool operator<(const Token &ob) const {
-        return strcmp(data.c_str(), ob.data.c_str()) < 0;
+        return strcmp((char*)data.data, (char*)ob.data.data) < 0;
     }
+
 
 private:
     friend class boost::serialization::access;
@@ -44,7 +41,7 @@ private:
     }
 };
 
-static std::ostream &operator<<(std::ostream &os, Token &arg) {
+static std::ostream &operator<<(std::ostream &os, EncryptedData &arg) {
     os << "title = " << arg.data;
     return os;
 }
