@@ -41,11 +41,6 @@ FORMS += \
 TRANSLATIONS += \
     SinglePassword_uk_UA.ts
 
-PKGCONFIG += openssl
-PKGCONFIG += boost_serialization
-PKGCONFIG += boost_filesystem
-PKGCONFIG += nlohmann-json
-
 INCLUDEPATH += /usr/local/include
 INCLUDEPATH += /usr/local/opt/boost/include
 INCLUDEPATH += /usr/local/opt/openssl/include
@@ -55,14 +50,12 @@ OPENSSL_LIBRARIES = /usr/local/opt/openssl/lib
 OPENSSL_INCLUDE_DIR = /usr/local/opt/openssl/include/openssl
 OPENSSL_USE_STATIC_LIBS = TRUE
 
-#DEFINES = BOOST_ALL_NO_LIB
 Boost_USE_STATIC_LIBS = ON
 Boost_USE_MULTITHREADED = ON
 Boost_USE_STATIC_RUNTIME = OFF
 
 LIBS += -L/usr/local/lib -L/usr/local/opt/nlohmann-json/lib -L/usr/local/opt/openssl/lib -lboost_serialization -lboost_filesystem -lssl -lcrypto
 
-# MACOSX_DEPLOYMENT_TARGET=10.14
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
