@@ -45,7 +45,7 @@ EncryptService *EncryptService::GetInstance(const std::string* value)
 
 void EncryptService::initializeDb(const std::string &pass){
 
-    Util::getEncKeys(encryptor->getEncKeys(), pass);
+    getEncKeys(encryptor->getEncKeys(), pass);
     Token initialToken{};
     Util::toPlainToken(INITIAL_TOKEN, initialToken);
     EncryptedData encryptedData{};
@@ -63,7 +63,7 @@ bool EncryptService::initialTokenExists(){
 bool EncryptService::validatePass(const std::string &pass){
     try
     {
-        Util::getEncKeys(encryptor->getEncKeys(), pass);
+        getEncKeys(encryptor->getEncKeys(), pass);
         Token initialToken{};
         Util::toPlainToken(INITIAL_TOKEN, initialToken);
         DecryptedData data = decryptData(initialToken);
@@ -139,6 +139,17 @@ DecryptedData EncryptService::decryptData(const Token &token){
 
 void EncryptService::decryptData(const EncryptedData &encryptedData, DecryptedData &outDecryptedData){
     encryptor->decrypt(&encryptedData, &outDecryptedData);
+}
+
+void EncryptService::getEncKeys(EncKeys *encKeys, const std::string &masterPass) {
+    const EVP_CIPHER *cipher;
+    std::string salt_s = std::string(masterPass);
+    std::reverse(salt_s.begin(), salt_s.end());
+    const unsigned char *salt = (unsigned char*) salt_s.c_str();
+    cipher = EVP_get_cipherbyname("aes-256-cbc");
+    EVP_BytesToKey(cipher, EVP_get_digestbyname("md5"), salt,
+               (unsigned char *) masterPass.c_str(),
+               masterPass.size(), 1, encKeys->key,  encKeys->iv);
 }
 
 

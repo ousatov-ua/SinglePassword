@@ -22,12 +22,14 @@ public:
     DecryptedData decryptData(const Token &token);
     SaveResult removeToken(const Token &token);
     bool tokenExists(const Token &token);
+
 private:
     EncryptService(const std::string db, const std::string log);
     std::unique_ptr<Database> database;
     std::unique_ptr<Encryptor> encryptor;
     bool encrypt(EncryptedData &outEncryptedData, const DecryptedData &decryptedData);
     void decryptData(const EncryptedData& encryptedData, DecryptedData &outDecryptedData);
+    static void getEncKeys(EncKeys *encKeys, const std::string &masterPass);
 };
 
 #endif // ENCRYPTSERVICE_H

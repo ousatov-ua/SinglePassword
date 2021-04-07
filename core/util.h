@@ -10,7 +10,6 @@ class Util
 {
 public:
 
-    static void getEncKeys(EncKeys *encKeys, const std::string &masterPass);
     static void toToken(std::string plainToken, Token &outToken);
     static void toPlainToken(const std::string &plainToken, Token &outToken);
     static DecryptedData createDecryptedData(const std::string &value);
