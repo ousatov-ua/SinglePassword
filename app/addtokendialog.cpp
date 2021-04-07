@@ -36,7 +36,7 @@ void AddTokenDialog::on_saveButton__clicked()
         return;
     }
     const std::string tokenData = data.toStdString();
-    DecryptedData decryptedData = EncryptService::GetInstance()->createDecryptedData(tokenData);
+    DecryptedData decryptedData = Util::createDecryptedData(tokenData);
     switch (mode) {
 
     case CREATE:{

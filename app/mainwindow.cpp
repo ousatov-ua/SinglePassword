@@ -27,14 +27,12 @@ void MainWindow::showTokens(const QString *filter){
     }
     bool doFilter = filter!=nullptr && normalizedFilter.size() !=0;
     foreach(const Token token, EncryptService::GetInstance()->getTokens()){
+        if(token.plain && strcmp(INITIAL_TOKEN.c_str(), (char*)token.data.data) == 0){
+            continue;
+        }
         DecryptedData decryptedData{};
         EncryptService::GetInstance()->decrypt(token.data, decryptedData);
         const char* token_cstr = (char*)decryptedData.data;
-
-        if(strcmp(INITIAL_TOKEN.c_str(), token_cstr) == 0){
-            continue;
-        }
-
         const std::string tokenValueLow = QString(token_cstr).toLower().toStdString();
         if(doFilter && (tokenValueLow.find(normalizedFilter)==std::string::npos)){
             continue;

@@ -11,7 +11,10 @@ public:
 
     static void getEncKeys(EncKeys *encKeys, const std::string &masterPass);
     static void toToken(std::string plainToken, Token &outToken);
-    static void toPlainToken(const Token &token, DecryptedData &outDecryptedData);
+    static void toPlainToken(const std::string &plainToken, Token &outToken);
+    static DecryptedData createDecryptedData(const std::string &value);
+    static const std::string randomString();
+    static bool isUUIDString(const DecryptedData &decryptedData);
 
 private:
     Util();

@@ -43,6 +43,12 @@ struct DecryptedData {
 struct EncryptedData {
     unsigned char data[BUFFER_SIZE];
     size_t length;
+
+    friend bool operator==(const std::string &string, const EncryptedData &encryptedData) {
+        std::string_view v = std::string_view((char *) encryptedData.data);
+        return string == v.substr(0, encryptedData.length);
+    }
+
 private:
     friend class boost::serialization::access;
 

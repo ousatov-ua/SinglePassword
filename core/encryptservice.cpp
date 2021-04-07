@@ -32,7 +32,6 @@ EncryptService *EncryptService::GetInstance(const std::string* value)
             std::string db = path_s.string() +  "/db.spdb";
             fs::path path_db = db;
             instance_ = new EncryptService(db);
-            instance_->databaseExists = fs::exists(path_db);
         }else{
             instance_ = new EncryptService(*value);
         }
@@ -44,36 +43,31 @@ EncryptService *EncryptService::GetInstance(const std::string* value)
 void EncryptService::initializeDb(const std::string &pass){
 
     Util::getEncKeys(encryptor->getEncKeys(), pass);
-
     Token initialToken{};
-    Util::toToken(INITIAL_TOKEN, initialToken);
+    Util::toPlainToken(INITIAL_TOKEN, initialToken);
 
     EncryptedData encryptedData{};
-    DecryptedData decryptedData = createDecryptedData(INITIAL_VALUE);
+    DecryptedData decryptedData = Util::createDecryptedData(Util::randomString());
     encryptor->encrypt(&decryptedData, &encryptedData);
     database->addToken(initialToken, encryptedData);
 }
 
 bool EncryptService::initialTokenExists(){
-    return databaseExists;
-    /*const Token initialToken{};
-    const DecryptedData initialTokenValue{.length =INITIAL_TOKEN.length()};
-    strcpy((char*)initialTokenValue.data, INITIAL_VALUE.c_str());
-    encrypt(initialToken, initialTokenValue);
-    return database->tokenExists(initialToken); */
+    Token initialToken{};
+    Util::toPlainToken(INITIAL_TOKEN, initialToken);
+    return database->tokenExists(initialToken);
 }
 
 bool EncryptService::validatePass(const std::string &pass){
     try
     {
         Util::getEncKeys(encryptor->getEncKeys(), pass);
-
         Token initialToken{};
-        Util::toToken(INITIAL_TOKEN, initialToken);
+        Util::toPlainToken(INITIAL_TOKEN, initialToken);
         const EncryptedData encryptedData = database->getEncryptedData(initialToken);
         DecryptedData decryptedData{};
         encryptor->decrypt(&encryptedData, &decryptedData);
-        return INITIAL_VALUE == decryptedData;
+        return Util::isUUIDString(decryptedData);
     }catch(const DecryptException &e){
         return false;
     }
@@ -120,14 +114,6 @@ SaveResult EncryptService::encrypt(const Token &token, const DecryptedData &decr
 
 SaveResult EncryptService::removeToken(const Token &token){
     return database->removeToken(token);
-}
-
-DecryptedData EncryptService::createDecryptedData(const std::string &value) {
-    DecryptedData decryptedData{};
-    memcpy(decryptedData.data, value.c_str(), value.size());
-    decryptedData.data[value.size()] = '\0';
-    decryptedData.length =value.size();
-    return decryptedData;
 }
 
 bool EncryptService::containsToken(const Token &token){

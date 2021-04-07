@@ -19,13 +19,13 @@
 #define SAVE_SUCCESS 1
 
 #define INITIAL_TOKEN std::string("??$$#initial#$$??")
-#define INITIAL_VALUE std::string("initial database")
 
 using SaveResult = int;
 
 
 struct Token {
     EncryptedData data;
+    bool plain = false;
 
     bool operator<(const Token &ob) const {
         return strcmp((char*)data.data, (char*)ob.data.data) < 0;
@@ -38,6 +38,7 @@ private:
     template<typename Archive>
     void serialize(Archive &ar, const unsigned int version) {
         ar & data;
+        ar & plain;
     }
 };
 
@@ -64,11 +65,12 @@ public:
 
     bool containsToken(const Token &token) const;
 
+    SaveResult save();
+
 private:
     const std::string path_;
     std::map<Token, EncryptedData> data_;
 
-    SaveResult save();
 };
 
 
