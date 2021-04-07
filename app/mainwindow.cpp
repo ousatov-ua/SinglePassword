@@ -97,7 +97,7 @@ void MainWindow::on_deleteToken__clicked()
     auto indexes = ui->tokensList_->selectionModel()->selectedIndexes();
     if(!indexes.isEmpty()){
 
-        if (QMessageBox::Yes != QMessageBox::question(this, "Remove token", "Remove Token? It cannot be undone.", QMessageBox::Yes | QMessageBox::No))
+        if (QMessageBox::Yes != QMessageBox::question(this, "Remove token", "Remove Token? This cannot be undone", QMessageBox::Yes | QMessageBox::No))
         {
             return;
 
