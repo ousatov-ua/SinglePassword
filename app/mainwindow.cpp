@@ -30,8 +30,7 @@ void MainWindow::showTokens(const QString *filter){
         if(token.plain){
             continue;
         }
-        DecryptedData decryptedData{};
-        EncryptService::GetInstance()->decrypt(token.data, decryptedData);
+        DecryptedData decryptedData = EncryptService::GetInstance()->decryptToken(token);
         const char* token_cstr = (char*)decryptedData.data;
         const std::string tokenValueLow = QString(token_cstr).toLower().toStdString();
         if(doFilter && (tokenValueLow.find(normalizedFilter)==std::string::npos)){
@@ -53,12 +52,11 @@ MainWindow::~MainWindow()
 }
 
 bool MainWindow::addToken(const Token &token, const DecryptedData &decryptedData, Mode mode){
-    SaveResult saveResult = EncryptService::GetInstance()->encrypt(token, decryptedData);
+    SaveResult saveResult = EncryptService::GetInstance()->saveTokenData(token, decryptedData);
     if(mode == CREATE && saveResult == SAVE_SUCCESS){
         if(model->insertRow(model->rowCount())) {
             QModelIndex index = model->index(model->rowCount() - 1, 0);
-            DecryptedData decryptedData{};
-            EncryptService::GetInstance()->decrypt(token.data, decryptedData);
+            DecryptedData decryptedData = EncryptService::GetInstance()->decryptData(token);
             model->setData(index, QString((char*)decryptedData.data));
         }
     }
@@ -113,9 +111,8 @@ void MainWindow::selectionUpdated(const QModelIndex &index)
     const std::string tokenValue = index.data(Qt::DisplayRole).toString().toStdString();
     Token token{};
     Util::toToken(tokenValue, token);
-    DecryptedData decryptedData{};
-    EncryptService::GetInstance()->decryptValue(token, decryptedData);
-    const auto value = QString(EncryptService::GetInstance()->toStdString(decryptedData).c_str());
+    DecryptedData decryptedData = EncryptService::GetInstance()->decryptData(token);
+    const auto value = QString(Util::toStdString(decryptedData).c_str());
     ui->tokenValue_->document()->setPlainText(value);
 }
 
@@ -137,8 +134,7 @@ void MainWindow::on_editToken__clicked()
     const std::string tokenValue = index.data(Qt::DisplayRole).toString().toStdString();
     Token outToken{};
     Util::toToken(tokenValue, outToken);
-    DecryptedData decryptedData{};
-    EncryptService::GetInstance()->decryptValue(outToken, decryptedData);
+    DecryptedData decryptedData = EncryptService::GetInstance()->decryptData(outToken);
     if(addTokenDialog == nullptr){
         addTokenDialog = new AddTokenDialog(this);
     }

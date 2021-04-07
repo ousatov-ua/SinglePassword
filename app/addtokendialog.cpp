@@ -40,7 +40,7 @@ void AddTokenDialog::on_saveButton__clicked()
     switch (mode) {
 
     case CREATE:{
-        if(EncryptService::GetInstance()->containsToken(token)){
+        if(EncryptService::GetInstance()->tokenExists(token)){
             QMessageBox::information(this, "Error", "The token already exists!");
             return;
         }
@@ -78,10 +78,9 @@ void AddTokenDialog::setMode(Mode mode){
 }
 
 void AddTokenDialog::setData(const Token &token, const DecryptedData &decryptedData){
-    DecryptedData plainToken{};
-    EncryptService::GetInstance()->decrypt(token.data, plainToken);
+    DecryptedData plainToken = EncryptService::GetInstance()->decryptToken(token);
     this->ui->token_->setText(QString((char*)plainToken.data));
-    this->ui->data_->document()->setPlainText(QString(EncryptService::GetInstance()->toStdString(decryptedData).c_str()));
+    this->ui->data_->document()->setPlainText(QString(Util::toStdString(decryptedData).c_str()));
 
 }
 

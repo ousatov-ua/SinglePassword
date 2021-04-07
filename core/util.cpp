@@ -58,4 +58,8 @@ bool Util::isUUIDString(const DecryptedData &decryptedData){
     return true;
 }
 
+const std::string Util::toStdString(const DecryptedData &decryptedData){
+    std::string v = std::string((char*) decryptedData.data);
+    return v;
+}
 

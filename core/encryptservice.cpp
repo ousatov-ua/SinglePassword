@@ -83,7 +83,7 @@ bool EncryptService::encrypt(EncryptedData &outEncryptedData, const DecryptedDat
         encryptor->encrypt(&decryptedData, &outEncryptedData);
         DecryptedData outDecryptedData{};
         encryptor->decrypt(&outEncryptedData, &outDecryptedData);
-        if(toStdString(decryptedData)!= toStdString(outDecryptedData)){
+        if(Util::toStdString(decryptedData)!= Util::toStdString(outDecryptedData)){
             return false;
         }
         return true;
@@ -100,7 +100,13 @@ bool EncryptService::encryptToken(Token &outToken, const DecryptedData &decrypte
     }
 }
 
-SaveResult EncryptService::encrypt(const Token &token, const DecryptedData &decryptedData){
+DecryptedData EncryptService::decryptToken(const Token &token){
+    DecryptedData decryptedData{};
+    decryptData(token.data, decryptedData);
+    return decryptedData;
+}
+
+SaveResult EncryptService::saveTokenData(const Token &token, const DecryptedData &decryptedData){
     EncryptedData encryptedData{};
     try{
         if(!encrypt(encryptedData, decryptedData)){
@@ -116,21 +122,19 @@ SaveResult EncryptService::removeToken(const Token &token){
     return database->removeToken(token);
 }
 
-bool EncryptService::containsToken(const Token &token){
+bool EncryptService::tokenExists(const Token &token){
     return database->containsToken(token);
 }
 
-void EncryptService::decryptValue(const Token &token, DecryptedData &outDecryptedData){
+DecryptedData EncryptService::decryptData(const Token &token){
+    DecryptedData decryptedData{};
     const EncryptedData data = database->getEncryptedData(token);
-    decrypt(data, outDecryptedData);
+    decryptData(data, decryptedData);
+    return decryptedData;
 }
 
-void EncryptService::decrypt(const EncryptedData &encryptedData, DecryptedData &outDecryptedData){
+void EncryptService::decryptData(const EncryptedData &encryptedData, DecryptedData &outDecryptedData){
     encryptor->decrypt(&encryptedData, &outDecryptedData);
 }
 
 
-std::string EncryptService::toStdString(const DecryptedData &decryptedData){
-    std::string v = std::string((char*) decryptedData.data);
-    return v;
-}

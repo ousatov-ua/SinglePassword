@@ -15,6 +15,7 @@ public:
     static DecryptedData createDecryptedData(const std::string &value);
     static const std::string randomString();
     static bool isUUIDString(const DecryptedData &decryptedData);
+    static const std::string toStdString(const DecryptedData &decryptedData);
 
 private:
     Util();
