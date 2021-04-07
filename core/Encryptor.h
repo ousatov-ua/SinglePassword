@@ -24,7 +24,7 @@ struct DecryptedData {
     size_t length;
     nlohmann::ordered_json json;
 
-    std::string getValue() const{
+    const std::string getValue() const{
         return json["value"];
     }
 
@@ -59,7 +59,7 @@ private:
     friend class boost::serialization::access;
 
     template<typename Archive>
-    void serialize(Archive &ar, const unsigned int version) {
+    void serialize(Archive &ar, const unsigned int /*version */) {
         ar & data;
         ar & length;
     }

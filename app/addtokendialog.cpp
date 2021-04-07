@@ -67,7 +67,7 @@ void AddTokenDialog::closeDialog(){
 
 }
 
-void AddTokenDialog::closeEvent(QCloseEvent * event){
+void AddTokenDialog::closeEvent(QCloseEvent * /* event */){
     closeDialog();
 }
 
