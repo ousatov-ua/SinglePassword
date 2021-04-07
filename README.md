@@ -15,7 +15,7 @@ Libraries:
 
 Make standalone for MacOS:
 
-`macdeployqt SinglePassword.app`
+`macdeployqt SinglePassword.app -dmg`
 
 ## Database
 The data is saved in your home directory, in the path: `$HOME/.singlePass/db.spdb`.
