@@ -2,7 +2,7 @@
 
 ## Screenshot
 
-![alt text](screen.jpg?raw=true)
+![alt text](screen.png?raw=true)
 
 ## Build
 
