@@ -96,6 +96,12 @@ void MainWindow::on_deleteToken__clicked()
 {
     auto indexes = ui->tokensList_->selectionModel()->selectedIndexes();
     if(!indexes.isEmpty()){
+
+        if (QMessageBox::Yes != QMessageBox::question(this, "Remove token", "Remove Token? It cannot be undone.", QMessageBox::Yes | QMessageBox::No))
+        {
+            return;
+
+        }
         auto index = indexes.first();
 
         const std::string tokenValue = index.data(Qt::DisplayRole).toString().toStdString();
@@ -103,6 +109,8 @@ void MainWindow::on_deleteToken__clicked()
         Util::toToken(tokenValue, token);
         removeToken(token);
         ui->tokensList_->clearSelection();
+    }else{
+        QMessageBox::information(this, "Remove token", "Please select a token");
     }
 }
 
@@ -127,7 +135,7 @@ void MainWindow::on_editToken__clicked()
 {
     auto indexes = ui->tokensList_->selectionModel()->selectedIndexes();
     if(indexes.isEmpty()){
-        QMessageBox::information(this, "Edit token", "Please select token");
+        QMessageBox::information(this, "Edit token", "Please select a token");
         return;
     }
     auto index = indexes.first();

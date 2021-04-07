@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>AddTokenDialog</class>
  <widget class="QDialog" name="AddTokenDialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +14,10 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Add/Modify Token</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
   </property>
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
@@ -23,7 +29,7 @@
     </rect>
    </property>
    <property name="title">
-    <string>Add token:</string>
+    <string/>
    </property>
    <widget class="QLabel" name="label">
     <property name="geometry">

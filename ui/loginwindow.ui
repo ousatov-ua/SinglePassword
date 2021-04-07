@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Decrypt Base</string>
+   <string>Single Password</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="groupBox">
@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="title">
-     <string>Please enter master password:</string>
+     <string/>
     </property>
     <widget class="QPushButton" name="DecryptButton">
      <property name="geometry">
