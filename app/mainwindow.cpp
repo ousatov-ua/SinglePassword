@@ -40,6 +40,7 @@ void MainWindow::showTokens(const QString *filter){
         tokens << token_cstr;
     }
     model->setStringList(tokens);
+    ui->tokenValue_->document()->clear();
 }
 
 MainWindow::~MainWindow()
