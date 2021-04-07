@@ -42,11 +42,6 @@ private:
     }
 };
 
-static std::ostream &operator<<(std::ostream &os, EncryptedData &arg) {
-    os << "title = " << arg.data;
-    return os;
-}
-
 class Database {
 
 public:
