@@ -34,10 +34,13 @@ void Util::toPlainToken(const std::string &plainToken, Token &outToken){
 }
 
 DecryptedData Util::createDecryptedData(const std::string &value){
+    nlohmann::ordered_json res;
+    res["value"]=value;
+    const std::string data = res.dump();
     DecryptedData decryptedData{};
-    memcpy(decryptedData.data, value.c_str(), value.size());
-    decryptedData.data[value.size()] = '\0';
-    decryptedData.length =value.size();
+    memcpy(decryptedData.data, data.c_str(), data.size());
+    decryptedData.data[data.size()] = '\0';
+    decryptedData.length = data.size();
     return decryptedData;
 }
 
@@ -49,9 +52,9 @@ const std::string Util::randomString(){
     return uuid;
 }
 
-bool Util::isUUIDString(const DecryptedData &decryptedData){
-    for(size_t i=0; i< decryptedData.length; i++){
-        if(bucket.find(decryptedData.data[i]) == std::string::npos){
+bool Util::isUUIDString(const std::string &value){
+    for(size_t i=0; i< value.size(); i++){
+        if(bucket.find(value[i]) == std::string::npos){
             return false;
         }
     }

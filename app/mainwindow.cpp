@@ -32,7 +32,8 @@ void MainWindow::showTokens(const QString *filter){
             continue;
         }
         DecryptedData decryptedData = EncryptService::GetInstance()->decryptToken(token);
-        const char* token_cstr = (char*)decryptedData.data;
+        const std::string value = decryptedData.getValue();
+        const char* token_cstr = value.c_str();
         const std::string tokenValueLow = QString(token_cstr).toLower().toStdString();
         if(doFilter && (tokenValueLow.find(normalizedFilter)==std::string::npos)){
             continue;
@@ -59,7 +60,7 @@ bool MainWindow::addToken(const Token &token, const DecryptedData &decryptedData
         if(model->insertRow(model->rowCount())) {
             QModelIndex index = model->index(model->rowCount() - 1, 0);
             DecryptedData decryptedData = EncryptService::GetInstance()->decryptToken(token);
-            model->setData(index, QString((char*)decryptedData.data));
+            model->setData(index, QString(decryptedData.getValue().c_str()));
         }
     }
     if(mode == EDIT){
@@ -121,8 +122,9 @@ void MainWindow::selectionUpdated(const QModelIndex &index)
     const std::string tokenValue = index.data(Qt::DisplayRole).toString().toStdString();
     Token token{};
     Util::toToken(tokenValue, token);
-    DecryptedData decryptedData = EncryptService::GetInstance()->decryptData(token);
-    const auto value = QString(Util::toStdString(decryptedData).c_str());
+    const DecryptedData decryptedData = EncryptService::GetInstance()->decryptData(token);
+    const std::string sValue = decryptedData.getValue();
+    const auto value = QString(sValue.c_str());
     ui->tokenValue_->document()->setPlainText(value);
 }
 
@@ -144,7 +146,7 @@ void MainWindow::on_editToken__clicked()
     const std::string tokenValue = index.data(Qt::DisplayRole).toString().toStdString();
     Token outToken{};
     Util::toToken(tokenValue, outToken);
-    DecryptedData decryptedData = EncryptService::GetInstance()->decryptData(outToken);
+    const DecryptedData decryptedData = EncryptService::GetInstance()->decryptData(outToken);
     if(addTokenDialog == nullptr){
         addTokenDialog = new AddTokenDialog(this);
     }

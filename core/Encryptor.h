@@ -9,8 +9,9 @@
 #include <array>
 #include <boost/serialization/access.hpp>
 #include <openssl/evp.h>
+#include <nlohmann/json.hpp>
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 4096
 #define PASS_MIN_LENGTH 8
 
 struct EncKeys {
@@ -21,6 +22,11 @@ struct EncKeys {
 struct DecryptedData {
     unsigned char data[BUFFER_SIZE];
     size_t length;
+    nlohmann::ordered_json json;
+
+    std::string getValue() const{
+        return json["value"];
+    }
 
     friend std::ostream &operator<<(std::ostream &ostream, const DecryptedData &decryptedData) {
         std::string_view v = std::string_view((char *) decryptedData.data);

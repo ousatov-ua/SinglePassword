@@ -78,10 +78,9 @@ void AddTokenDialog::setMode(Mode mode){
 }
 
 void AddTokenDialog::setData(const Token &token, const DecryptedData &decryptedData){
-    DecryptedData plainToken = EncryptService::GetInstance()->decryptToken(token);
-    this->ui->token_->setText(QString((char*)plainToken.data));
-    this->ui->data_->document()->setPlainText(QString(Util::toStdString(decryptedData).c_str()));
-
+    auto plainToken = EncryptService::GetInstance()->decryptToken(token);
+    this->ui->token_->setText(QString(plainToken.getValue().c_str()));
+    this->ui->data_->document()->setPlainText(QString(decryptedData.getValue().c_str()));
 }
 
 

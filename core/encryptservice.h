@@ -4,6 +4,7 @@
 #include <memory>
 #include "Database.h"
 #include "Encryptor.h"
+#include <nlohmann/json.hpp>
 
 class EncryptService
 {

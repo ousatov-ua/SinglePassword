@@ -5,6 +5,7 @@
 #include <pwd.h>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
+#include <nlohmann/json.hpp>
 
 namespace fs = boost::filesystem;
 
@@ -47,7 +48,6 @@ void EncryptService::initializeDb(const std::string &pass){
     Util::getEncKeys(encryptor->getEncKeys(), pass);
     Token initialToken{};
     Util::toPlainToken(INITIAL_TOKEN, initialToken);
-
     EncryptedData encryptedData{};
     DecryptedData decryptedData = Util::createDecryptedData(Util::randomString());
     encryptor->encrypt(&decryptedData, &encryptedData);
@@ -66,10 +66,8 @@ bool EncryptService::validatePass(const std::string &pass){
         Util::getEncKeys(encryptor->getEncKeys(), pass);
         Token initialToken{};
         Util::toPlainToken(INITIAL_TOKEN, initialToken);
-        const EncryptedData encryptedData = database->getEncryptedData(initialToken);
-        DecryptedData decryptedData{};
-        encryptor->decrypt(&encryptedData, &decryptedData);
-        return Util::isUUIDString(decryptedData);
+        DecryptedData data = decryptData(initialToken);
+        return Util::isUUIDString(data.getValue());
     }catch(const DecryptException &e){
         return false;
     }
@@ -105,6 +103,8 @@ bool EncryptService::encryptToken(Token &outToken, const DecryptedData &decrypte
 DecryptedData EncryptService::decryptToken(const Token &token){
     DecryptedData decryptedData{};
     decryptData(token.data, decryptedData);
+    nlohmann::ordered_json json = nlohmann::ordered_json::parse(decryptedData.data);
+    decryptedData.json = json;
     return decryptedData;
 }
 
@@ -132,6 +132,8 @@ DecryptedData EncryptService::decryptData(const Token &token){
     DecryptedData decryptedData{};
     const EncryptedData data = database->getEncryptedData(token);
     decryptData(data, decryptedData);
+    nlohmann::ordered_json res = nlohmann::ordered_json::parse(decryptedData.data);
+    decryptedData.json = res;
     return decryptedData;
 }
 

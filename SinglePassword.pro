@@ -44,7 +44,9 @@ TRANSLATIONS += \
 PKGCONFIG += openssl
 PKGCONFIG += boost_serialization
 PKGCONFIG += boost_filesystem
+PKGCONFIG += nlohmann-json
 
+INCLUDEPATH += /usr/local/include
 INCLUDEPATH += /usr/local/opt/boost/include
 INCLUDEPATH += /usr/local/opt/openssl/include
 
@@ -58,7 +60,7 @@ Boost_USE_STATIC_LIBS = ON
 Boost_USE_MULTITHREADED = ON
 Boost_USE_STATIC_RUNTIME = OFF
 
-LIBS += -L/usr/local/lib -L/usr/local/opt/openssl/lib -lboost_serialization -lboost_filesystem -lssl -lcrypto
+LIBS += -L/usr/local/lib -L/usr/local/opt/nlohmann-json/lib -L/usr/local/opt/openssl/lib -lboost_serialization -lboost_filesystem -lssl -lcrypto
 
 # MACOSX_DEPLOYMENT_TARGET=10.14
 
