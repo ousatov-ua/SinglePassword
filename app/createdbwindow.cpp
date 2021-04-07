@@ -10,6 +10,7 @@ CreateDbWindow::CreateDbWindow(QWidget *parent) :
     ui(new Ui::CreateDbWindow)
 {
     ui->setupUi(this);
+    this->setFixedSize(this->width(), this->height());
 }
 
 CreateDbWindow::~CreateDbWindow()

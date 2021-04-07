@@ -9,8 +9,8 @@ AddTokenDialog::AddTokenDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddTokenDialog)
 {
-
     ui->setupUi(this);
+    this->setFixedSize(this->width(), this->height());
 }
 
 AddTokenDialog::~AddTokenDialog()
