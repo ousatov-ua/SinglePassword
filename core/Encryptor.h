@@ -85,7 +85,7 @@ struct DecryptException : public std::exception {
 
 class Encryptor {
 public:
-    Encryptor();
+    Encryptor(const std::string &log);
 
     ~Encryptor();
 

@@ -22,7 +22,7 @@ public:
     SaveResult removeToken(const Token &token);
     bool tokenExists(const Token &token);
 private:
-    EncryptService(const std::string db);
+    EncryptService(const std::string db, const std::string log);
     std::unique_ptr<Database> database;
     std::unique_ptr<Encryptor> encryptor;
     bool encrypt(EncryptedData &outEncryptedData, const DecryptedData &decryptedData);

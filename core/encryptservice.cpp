@@ -8,9 +8,9 @@
 
 namespace fs = boost::filesystem;
 
-EncryptService::EncryptService(const std::string db)
+EncryptService::EncryptService(const std::string db, const std::string log)
 {
-    this->encryptor = std::make_unique<Encryptor>();
+    this->encryptor = std::make_unique<Encryptor>(log);
     this->database = std::make_unique<Database>(db);
 }
 
@@ -19,21 +19,23 @@ static EncryptService *instance_ = nullptr;
 EncryptService *EncryptService::GetInstance(const std::string* value)
 {
     if(instance_==nullptr){
-        if(value == nullptr){
-            const char *homedir;
+        const char *homedir;
 
-            if ((homedir = getenv("HOME")) == NULL) {
-                homedir = getpwuid(getuid())->pw_dir;
-            }
-            fs::path path_s(std::string(homedir) + "/.singlePass");
-            if(!fs::exists(path_s)){
-                fs::create_directory(path_s);
-            }
+        if ((homedir = getenv("HOME")) == NULL) {
+            homedir = getpwuid(getuid())->pw_dir;
+        }
+        fs::path path_s(std::string(homedir) + "/.singlePass");
+        if(!fs::exists(path_s)){
+            fs::create_directory(path_s);
+        }
+        std::string log = path_s.string() + "/enc.log";
+
+        if(value == nullptr){
             std::string db = path_s.string() +  "/db.spdb";
             fs::path path_db = db;
-            instance_ = new EncryptService(db);
+            instance_ = new EncryptService(db, log);
         }else{
-            instance_ = new EncryptService(*value);
+            instance_ = new EncryptService(*value, log);
         }
 
     }

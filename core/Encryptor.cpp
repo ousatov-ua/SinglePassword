@@ -10,9 +10,9 @@
 #include <utility>
 
 
-Encryptor::Encryptor() {
+Encryptor::Encryptor(const std::string &log) {
     encKeys_ = std::make_unique<EncKeys>();
-    log_ = fopen("enc.log", "a");
+    log_ = fopen(log.c_str(), "a");
 }
 
 Encryptor::~Encryptor() {
