@@ -61,8 +61,7 @@ bool EncryptService::initialTokenExists(){
 }
 
 bool EncryptService::validatePass(const std::string &pass){
-    try
-    {
+    try {
         getEncKeys(encryptor->getEncKeys(), pass);
         Token initialToken{};
         Util::toPlainToken(INITIAL_TOKEN, initialToken);
@@ -83,10 +82,7 @@ bool EncryptService::encrypt(EncryptedData &outEncryptedData, const DecryptedDat
         encryptor->encrypt(&decryptedData, &outEncryptedData);
         DecryptedData outDecryptedData{};
         encryptor->decrypt(&outEncryptedData, &outDecryptedData);
-        if(Util::toStdString(decryptedData)!= Util::toStdString(outDecryptedData)){
-            return false;
-        }
-        return true;
+        return Util::toStdString(decryptedData) == Util::toStdString(outDecryptedData);
     } catch(const std::exception &e){
         return false;
     }
