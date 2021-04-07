@@ -56,7 +56,7 @@ bool MainWindow::addToken(const Token &token, const DecryptedData &decryptedData
     if(mode == CREATE && saveResult == SAVE_SUCCESS){
         if(model->insertRow(model->rowCount())) {
             QModelIndex index = model->index(model->rowCount() - 1, 0);
-            DecryptedData decryptedData = EncryptService::GetInstance()->decryptData(token);
+            DecryptedData decryptedData = EncryptService::GetInstance()->decryptToken(token);
             model->setData(index, QString((char*)decryptedData.data));
         }
     }
