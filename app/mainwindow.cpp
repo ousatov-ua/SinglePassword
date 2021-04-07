@@ -27,7 +27,7 @@ void MainWindow::showTokens(const QString *filter){
     }
     bool doFilter = filter!=nullptr && normalizedFilter.size() !=0;
     foreach(const Token token, EncryptService::GetInstance()->getTokens()){
-        if(token.plain && strcmp(INITIAL_TOKEN.c_str(), (char*)token.data.data) == 0){
+        if(token.plain){
             continue;
         }
         DecryptedData decryptedData{};
