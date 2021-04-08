@@ -40,18 +40,24 @@ FORMS += \
     ui/mainwindow.ui
 
 TRANSLATIONS += \
+    SinglePassword_en_US.ts \
     SinglePassword_uk_UA.ts
 
 INCLUDEPATH += /usr/local/include
 INCLUDEPATH += /usr/local/opt/boost/include
 INCLUDEPATH += /usr/local/opt/openssl/include
 
+TR_EXCLUDE += /usr/local/include/boost/*
+TR_EXCLUDE += /usr/local/include/boost/serialization/*
+TR_EXCLUDE += /usr/local/opt/openssl/*
+TR_EXCLUDE += /usr/local/opt/nlohmann-json/*
+
 OPENSSL_ROOT_DIR =/usr/local/opt/openssl
 OPENSSL_LIBRARIES = /usr/local/opt/openssl/lib
 OPENSSL_INCLUDE_DIR = /usr/local/opt/openssl/include/openssl
-OPENSSL_USE_STATIC_LIBS = TRUE
+OPENSSL_USE_STATIC_LIBS = FALSE
 
-Boost_USE_STATIC_LIBS = ON
+Boost_USE_STATIC_LIBS = OFF
 Boost_USE_MULTITHREADED = ON
 Boost_USE_STATIC_RUNTIME = OFF
 
