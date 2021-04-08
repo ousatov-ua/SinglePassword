@@ -1,5 +1,7 @@
 # SinglePassword
 
+Cross-platform.
+
 ## Screenshot
 
 ![alt text](screen.png?raw=true)
