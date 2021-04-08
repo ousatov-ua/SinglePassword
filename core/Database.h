@@ -13,7 +13,7 @@
 #include <boost/archive/binary_oarchive.hpp>
 #include <boost/archive/binary_iarchive.hpp>
 #include <boost/serialization/map.hpp>
-#include "Encryptor.h"
+#include "entities.h"
 
 #define SAVE_FAILED 0
 #define SAVE_SUCCESS 1
@@ -21,26 +21,6 @@
 #define INITIAL_TOKEN std::string("??$$#initial#$$??")
 
 using SaveResult = int;
-
-
-struct Token {
-    EncryptedData data;
-    bool plain = false;
-
-    bool operator<(const Token &ob) const {
-        return strcmp((char*)data.data, (char*)ob.data.data) < 0;
-    }
-
-
-private:
-    friend class boost::serialization::access;
-
-    template<typename Archive>
-    void serialize(Archive &ar, const unsigned int /* version */) {
-        ar & data;
-        ar & plain;
-    }
-};
 
 class Database {
 

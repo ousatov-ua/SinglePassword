@@ -2,8 +2,8 @@
 #define UTIL_H
 
 #include <string>
-#include "core/Encryptor.h"
-#include "encryptservice.h"
+#include "Encryptor.h"
+#include "entities.h"
 #include <nlohmann/json.hpp>
 
 class Util
@@ -19,7 +19,7 @@ public:
 
 private:
     Util();
-
+    static const std::string bucket;
 };
 
 #endif // UTIL_H

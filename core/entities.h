@@ -15,6 +15,7 @@ struct EncKeys {
     unsigned char iv [EVP_MAX_IV_LENGTH];
 };
 
+
 struct DecryptedData {
     unsigned char data[BUFFER_SIZE];
     size_t length;
@@ -55,6 +56,25 @@ private:
     void serialize(Archive &ar, const unsigned int /*version */) {
         ar & data;
         ar & length;
+    }
+};
+
+struct Token {
+    EncryptedData data;
+    bool plain = false;
+
+    bool operator<(const Token &ob) const {
+        return strcmp((char*)data.data, (char*)ob.data.data) < 0;
+    }
+
+
+private:
+    friend class boost::serialization::access;
+
+    template<typename Archive>
+    void serialize(Archive &ar, const unsigned int /* version */) {
+        ar & data;
+        ar & plain;
     }
 };
 

@@ -1,13 +1,13 @@
 #include "util.h"
 #include <openssl/evp.h>
 #include <QByteArray>
-
+#include "encryptservice.h"
 
 Util::Util()
 {
 
 }
-static const std::string bucket = "abcdefghijklmnopqrstuvwxyz";
+const std::string Util::bucket = "abcdefghijklmnopqrstuvwxyz";
 
 void Util::toToken(std::string plainToken, Token &outToken){
     DecryptedData decryptedToken = createDecryptedData(plainToken);
