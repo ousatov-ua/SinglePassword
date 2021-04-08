@@ -27,7 +27,7 @@ void MainWindow::showTokens(const QString *filter){
         normalizedFilter = filter->trimmed().toLower().toStdString();
     }
     bool doFilter = filter!=nullptr && normalizedFilter.size() !=0;
-    foreach(const Token token, EncryptService::GetInstance()->getTokens()){
+    for(const Token& token: EncryptService::GetInstance()->getTokens()){
         if(token.plain){
             continue;
         }
