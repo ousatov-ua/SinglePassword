@@ -9,9 +9,6 @@ Util::Util()
 }
 static const std::string bucket = "abcdefghijklmnopqrstuvwxyz";
 
-
-
-
 void Util::toToken(std::string plainToken, Token &outToken){
     DecryptedData decryptedToken = createDecryptedData(plainToken);
     EncryptService::GetInstance()->encryptToken(outToken, decryptedToken);

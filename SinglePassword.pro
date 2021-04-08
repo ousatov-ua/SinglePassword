@@ -28,6 +28,7 @@ HEADERS += \
     app/loginwindow.h \
     app/mainwindow.h \
     core/encryptservice.h \
+    core/entities.h \
     core/util.h \
     core/Encryptor.h \
     core/Database.h
