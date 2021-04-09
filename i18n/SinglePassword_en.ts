@@ -80,12 +80,12 @@
     <message>
         <location filename="ui/mainwindow.ui" line="14"/>
         <source>Single Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">Single Password</translation>
     </message>
     <message>
         <location filename="ui/mainwindow.ui" line="52"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation type="finished">Search</translation>
     </message>
     <message>
         <location filename="ui/mainwindow.ui" line="74"/>

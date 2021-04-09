@@ -12,13 +12,17 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     QTranslator qtTranslator;
-    bool loaded = qtTranslator.load("qt_" + QLocale::system().name(),
-              QLibraryInfo::path(QLibraryInfo::TranslationsPath));
-    app.installTranslator(&qtTranslator);
+    if(qtTranslator.load(QLocale::system(), "qt_", QString(),
+                 QLibraryInfo::path(QLibraryInfo::TranslationsPath))){
+        app.installTranslator(&qtTranslator);
+    }
 
     QTranslator myappTranslator;
-    loaded = myappTranslator.load("SinglePassword_" + QLocale::system().name());
-    app.installTranslator(&myappTranslator);
+   // myappTranslator.load(QLocale::system(), "SinglePassword_", QString(), ":/translations");
+    bool loaded = myappTranslator.load(QLocale(), QLatin1String("SinglePassword_"), QLatin1String(), QLatin1String(":/translations/i18n"));
+    if(loaded){
+        app.installTranslator(&myappTranslator);
+    }
 
     if(!EncryptService::GetInstance()->initialTokenExists()){
         CreateDbWindow  *createDbWindow = new CreateDbWindow();

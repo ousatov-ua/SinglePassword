@@ -40,8 +40,8 @@ FORMS += \
     ui/mainwindow.ui
 
 TRANSLATIONS += \
-    SinglePassword_en_US.ts \
-    SinglePassword_uk_UA.ts
+    i18n/SinglePassword_en.ts \
+    i18n/SinglePassword_uk.ts
 
 INCLUDEPATH += /usr/local/include
 INCLUDEPATH += /usr/local/opt/boost/include
@@ -68,3 +68,6 @@ LIBS += -L/usr/local/lib -L/usr/local/opt/nlohmann-json/lib -L/usr/local/opt/ope
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    Translations.qrc

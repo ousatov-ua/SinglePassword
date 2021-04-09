@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/translations">
+        <file>i18n/SinglePassword_uk.qm</file>
+        <file>i18n/SinglePassword_en.qm</file>
+    </qresource>
+</RCC>
