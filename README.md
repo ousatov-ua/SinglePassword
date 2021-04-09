@@ -6,7 +6,7 @@ The single master password is used to encrypt and decrypt data.
 
 256-bit AES encryption (CBC mode) is used: 256 bit key and a 128 bit IV.
 
-Each **token** (name of secured data, e.g. 'Facebook' on screenshot) **and its value** is encrypted separately and saved into the file on local storage.
+Each **token** (name of secured data, e.g. *Facebook* on screenshot) **and its value** is encrypted separately and saved into the file on local storage.
 
 ## Screenshot
 
